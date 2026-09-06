@@ -52,6 +52,18 @@ public class MarkupLabel extends Table {
         }    
     }
 
+    public void deleteChar(int c) {
+        text.deleteCharAt(c);
+    }
+
+    public void set(String txt) {
+        text = new StringBuilder(txt);
+    }
+
+    public void set(StringBuilder txt) {
+        text = txt;
+    }
+
     public void replace(String o, String n) {
         int ol = o.length();
         int nl = l.length();

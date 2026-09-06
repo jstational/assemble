@@ -8,13 +8,13 @@ import arc.scene.event.*;
 import arc.input.*;
 import ambl.logic.blocks.*;
 
-public class ACanvas extends LCanvas {
+public class ACanvas extends Table {
     public boolean dragging;
     public ABlock draggingBlock;
+    public WidgetGroup editorLayout;
 
     public ACanvas() {
-        canvas = this;
-        statements = new ALayout();
+        editorLayout = new ALayout();
 
         Core.scene.addListener(new InputListener() {
             @Override

@@ -1,7 +1,17 @@
 package ambl.logic;
 
-import arc.scene.ui.layout.*;
+import arc.scene.ui.*;
 
-public class ACloseDialog extends Table {
-    public ACloseDialog() {}
+/** options:
+ * Keep Assemble sugar
+ * Dont keep Assemble sugar
+ */
+public class ACloseDialog extends Dialog {
+    public ACloseDialog(Runnable runKAS, Runnable runDKAS) {
+        
+    }
+
+    private void setup() {
+
+    }
 }

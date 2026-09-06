@@ -1,7 +1,9 @@
 package ambl.logic.canvas;
 
-import mindustry.logic.LCanvas.*;
+import arc.scence.ui.layout.*;
+import ambl.logic.blocks.*;
+import arc.struct.*;
 
-public class ALayout extends DragLayout {
+public class ALayout extends WidgetGroup {
     public ALayout() {}
 }
