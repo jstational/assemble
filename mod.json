@@ -10,5 +10,6 @@
     "minGameVersion": "159.7",
 
     "java": true,
-    "main": "ambl.Assemble"
+    "main": "ambl.Assemble",
+    "hideBrowser": true
 }
