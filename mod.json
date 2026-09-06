@@ -4,7 +4,7 @@
     "displayName": "Assemble",
     "author": "jstational",
     "version": "0.0.1",
-    "description": "Swaps the default logic editor with a custom editor. Documentation at root/base",
+    "description": "Swaps the default logic editor with a custom editor",
 
     "hidden": true,
     "minGameVersion": "159.7",
