@@ -1,6 +1,6 @@
 package ambl.logic.lists;
 
-import arc.scene.ui.*;
+import arc.scene.ui.layout.*;
 import arc.struct.*;
 
 public class AClassList extends Table {

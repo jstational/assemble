@@ -36,7 +36,6 @@ public class ADialog extends LogicDialog {
         });
     }
 
-    @Override
     public void setup() {
         buttons.clearChildren();
         buttons.defaults().size(140f, 40f);
