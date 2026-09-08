@@ -2,8 +2,8 @@ package ambl;
 
 import mindustry.mod.*;
 import mindustry.*;
-import ambl.ui.*;
 import arc.scene.ui.*;
+import ambl.logic.*;
 
 public class Assemble extends Mod {
     @Override

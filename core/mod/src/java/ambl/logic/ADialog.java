@@ -2,6 +2,7 @@ package ambl.logic;
 
 import mindustry.logic.*;
 import arc.input.*;
+import arc.scene.*;
 import arc.scene.ui.layout.*;
 import mindustry.graphics.*;
 import ambl.logic.lists.*;
@@ -12,7 +13,7 @@ import mindustry.*;
 public class ADialog extends LogicDialog {
     public AVarsList vars;
     public AClassList classes;
-    public WidgetGroup editor;
+    public Element editor;
 
     public ADialog() {
         editor = new ACanvas();
@@ -21,7 +22,7 @@ public class ADialog extends LogicDialog {
 
         hidden(() -> {
             if(Vars.state.isGame() && !Vars.net.active() && !wasPaused){
-                Vars.state.set(State.playing);
+                Vars.state.set(GameState.State.playing);
             }
             Sounds.uiBack.play(); // Sounds is a generated class
         });
@@ -29,8 +30,8 @@ public class ADialog extends LogicDialog {
         shown(this::setup); // void shown(Runnable) in Dialog
         shown(() -> {
             if(Vars.state.isGame() && !Vars.net.active()){
-                wasPaused = Vars.state.is(State.paused); // wasPaused is from BaseDialog
-                Vars.state.set(State.paused);
+                wasPaused = Vars.state.is(GameState.State.paused); // wasPaused is from BaseDialog
+                Vars.state.set(GameState.State.paused);
             }
         });
     }

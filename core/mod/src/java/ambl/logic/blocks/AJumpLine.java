@@ -1,7 +1,6 @@
-package ambl.logic.canvas;
+package ambl.logic.blocks;
 
 import mindustry.logic.LCanvas.*;
-import ambl.logic.blocks.*;
 import arc.scene.*;
 
 public class AJumpLine extends Element {

@@ -2,6 +2,7 @@ package ambl.logic;
 
 import mindustry.logic.*;
 import arc.scene.ui.*;
+import arc.scene.ui.layout.*;
 import arc.*;
 import arc.scene.event.*;
 import arc.input.*;
@@ -13,8 +14,6 @@ public class ACanvas extends Table {
     public AJumpLine draggingJump;
 
     public ACanvas() {
-        editorLayout = new ALayout();
-
         Core.scene.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent e, float x, float y, int p, KeyCode button) {
@@ -38,7 +37,6 @@ public class ACanvas extends Table {
         rebuild();
     }
 
-    @Override
     public void rebuild() {}
 
     public void addBlock(ABlock block) {
