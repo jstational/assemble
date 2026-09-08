@@ -1,9 +1,8 @@
-package ambl.logic.canvas;
+package ambl.logic;
 
 import mindustry.logic.*;
 import arc.scene.ui.*;
 import arc.*;
-import ambl.logic.*;
 import arc.scene.event.*;
 import arc.input.*;
 import ambl.logic.blocks.*;
@@ -11,7 +10,7 @@ import ambl.logic.blocks.*;
 public class ACanvas extends Table {
     public boolean dragging;
     public ABlock draggingBlock;
-    public WidgetGroup editorLayout;
+    public AJumpLine draggingJump;
 
     public ACanvas() {
         editorLayout = new ALayout();
@@ -30,6 +29,8 @@ public class ACanvas extends Table {
             public void touchUp(InputEvent e, float x, float y, int p, KeyCode button) {
                 if(button == KeyCode.mouseLeft) {
                     dragging = false;
+
+                    draggingBlock = null;
                 }
             }
         });
@@ -39,4 +40,20 @@ public class ACanvas extends Table {
 
     @Override
     public void rebuild() {}
+
+    public void addBlock(ABlock block) {
+        children.add(block);
+    }
+
+    public void removeBlock(ABlock block) {
+        children.remove(block, false);
+    }
+
+    public void addJump(AJumpLine jump) {
+        children.add(jump);
+    }
+
+    public void removeJump(AJumpLine jump) {
+        children.remove(jump, false);
+    }
 }

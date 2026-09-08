@@ -1,4 +1,4 @@
-package ambl.logic.math;
+package ambl.logic.lang.functs;
 
 public enum MathFuncts {
     // arithmetic
@@ -29,7 +29,6 @@ public enum MathFuncts {
 
     // trigonometry + geometry
     atan, atan2, acos, asin, cos, sin, csc, csch, sec, sech, cot, coth, acsc, asec, acot, acsch, asech, shortangdist, cosh, sinh, tanh, acosh, asinh, atanh,
-    hypot, vectlen, vectang, dot, cross, norm, eucdist, reflect, refract,
     degtorad, radtodeg, gradtodeg, degtograd, gradtorad, radtograd,
 
     // algebra
@@ -39,4 +38,20 @@ public enum MathFuncts {
     permutation, combination,
     gcd, lcm,
     isprime, factorcount, nthfactor, coprime
+
+    // interpolations
+    lerp,
+    clerp,
+    remap,
+    step,
+    sstep,
+    serstep,
+    ilerp,
+    easein,
+    easeout,
+    easeinout,
+    bilerp,
+    trilerp,
+    slerp,
+    alerp
 }

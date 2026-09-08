@@ -2,7 +2,6 @@ package ambl.logic;
 
 import mindustry.logic.*;
 import arc.input.*;
-import ambl.logic.canvas.*;
 import arc.scene.ui.layout.*;
 import mindustry.graphics.*;
 import ambl.logic.lists.*;
@@ -13,7 +12,7 @@ import mindustry.*;
 public class ADialog extends LogicDialog {
     public AVarsList vars;
     public AClassList classes;
-    public Table editor;
+    public WidgetGroup editor;
 
     public ADialog() {
         editor = new ACanvas();
@@ -24,7 +23,7 @@ public class ADialog extends LogicDialog {
             if(Vars.state.isGame() && !Vars.net.active() && !wasPaused){
                 Vars.state.set(State.playing);
             }
-            Sounds.uiBack.play();
+            Sounds.uiBack.play(); // Sounds is a generated class
         });
 
         shown(this::setup); // void shown(Runnable) in Dialog
@@ -41,6 +40,8 @@ public class ADialog extends LogicDialog {
         buttons.clearChildren();
         buttons.defaults().size(140f, 40f);
 
-        buttons.button("@back", Icon.left, this::hide).name("back"); // this::hide is inherited from Dialog
+        buttons.button("@back", Icon.left, () -> { // default behavior: compile with sugar 
+            hide();
+        }).name("back"); // hide() is inherited from Dialog, Icon is a generated class
     }
 }

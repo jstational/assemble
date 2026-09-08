@@ -23,7 +23,5 @@ public enum Primitives {
     number,
     bool,
     vec2,
-    vec3,
-    vec4,
-    vec5
+    vec3
 }
