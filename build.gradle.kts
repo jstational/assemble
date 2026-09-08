@@ -78,7 +78,7 @@ tasks.register("jarAndroid") {
 
         //dex and desugar files - this requires d8 in your PATH
         val commands = (if(isWindows) "d8.bat" else "d8") + " $dependencies --min-api 14 --output " + project.name + "Android.jar " + project.name + "Desktop.jar"
-        val dexAndDesugar = ProcessBuilder(commands.split(" ")).directory(File("build/libs")).redirectOutput(ProcessBuilder.Redirect.INHERIT).redirectError(ProcessBuilder.Redirect.INHERIT)start()
+        val dexAndDesugar = ProcessBuilder(commands.split(" ")).directory(File("build/libs")).redirectOutput(ProcessBuilder.Redirect.INHERIT).redirectError(ProcessBuilder.Redirect.INHERIT).start()
         
         val dr = dexAndDesugar.waitFor()
 
