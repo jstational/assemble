@@ -37,7 +37,7 @@ public enum MathFuncts {
     // combinatorics
     permutation, combination,
     gcd, lcm,
-    isprime, factorcount, nthfactor, coprime
+    isprime, factorcount, nthfactor, coprime,
 
     // interpolations
     lerp,

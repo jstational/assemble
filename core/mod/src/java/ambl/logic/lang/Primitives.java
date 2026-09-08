@@ -4,7 +4,7 @@ public enum Primitives {
     // entities
     building,
     unit,
-    bullet
+    bullet,
 
     // types
     block,
@@ -17,7 +17,7 @@ public enum Primitives {
     stack,
     string,
     color,
-    null,
+    nullw,
     
     // computation
     number,
