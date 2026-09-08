@@ -49,6 +49,8 @@ java {
 
 val isWindows = System.getProperty("os.name").lowercase().contains("windows")
 val sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT")
+val desktopJar = layout.buildDirectory.file("libs/" + project.name + "Desktop.jar").get().asFile
+val androidJar = layout.buildDirectory.file("libs/" + project.name + "Android.jar").get().asFile
 
 dependencies {
     compileOnly(if(mindustryVersion == "be") "Anuken:MindustryBuilds:latest" else "Anuken:Mindustry:" + mindustryVersion)
@@ -59,24 +61,30 @@ tasks.register("jarAndroid") {
     val noAndroidSDK: String = "No valid Android SDK found. Ensure that ANDROID_HOME is set to your Android SDK directory."
     val noAndroidJar: String = "No android.jar found. Ensure that you have an Android platform installed."
 
+    inputs.file(desktopJar)
+    outputs.file(desktopJar)
+
     doLast {
         if(sdkRoot.isNullOrEmpty() || !File(sdkRoot).exists()) throw GradleException(noAndroidSDK)
 
         val platformRoot = File(sdkRoot +"/platforms/").listFiles().sortedDescending() ?.toList() ?.find {
                 File(it, "android.jar").exists()
-            }
+            } ?: throw GradleException(noAndroidJar)
 
         if(platformRoot == null) throw GradleException(noAndroidJar)
 
         //collect dependencies needed for desugaring
         val dependencies = (configurations.compileClasspath.get().files + configurations.runtimeClasspath.get().files + File(platformRoot, "android.jar")).joinToString(" ") { "--classpath " + it.path }
 
-        val d8 = if(isWindows) "d8.bat" else "d8"
-
         //dex and desugar files - this requires d8 in your PATH
-        val commands = d8 + " $dependencies --min-api 14 --output " + project.name + "Android.jar " + project.name + "Desktop.jar"
-        val dexAndDesugar = ProcessBuilder(commands.split(" ")).directory(File("build/libs")).redirectOutput(ProcessBuilder.Redirect.INHERIT).redirectError(ProcessBuilder.Redirect.INHERIT).start()
-        dexAndDesugar.waitFor()
+        val commands = (if(isWindows) "d8.bat" else "d8") + " $dependencies --min-api 14 --output " + project.name + "Android.jar " + project.name + "Desktop.jar"
+        val dexAndDesugar = ProcessBuilder(commands.split(" ")).directory(File("build/libs")).redirectOutput(ProcessBuilder.Redirect.INHERIT).redirectError(ProcessBuilder.Redirect.INHERIT)start()
+        
+        val dr = dexAndDesugar.waitFor()
+
+        if(dr != 0) {
+            throw GradleException("dexAndDesugar returned " + dr)
+        }
     }
 }
 
@@ -101,20 +109,19 @@ tasks.jar {
 tasks.register<Jar>("deploy") {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     dependsOn("jarAndroid")
-    dependsOn("jar")
 
     archiveFileName = project.name + ".jar"
 
-    from({
+    from(provider {
         listOf(
-            zipTree("build/libs/" + project.name +"Desktop.jar"),
-            zipTree("build/libs/" + project.name +"Android.jar")
+            zipTree(desktopJar),
+            zipTree(androidJar)
         )
     })
 
     doLast {
-        delete("build/libs/" + project.name + "Android.jar")
-        delete("build/libs/" + project.name + "Desktop.jar")
+        delete(androidJar)
+        delete(desktopJar)
     }
 }
 
