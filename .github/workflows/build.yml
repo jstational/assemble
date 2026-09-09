@@ -22,6 +22,10 @@ jobs:
       - name: "Install SDK"
         uses: "android-actions/setup-android@v3"
 
+      - name: Install SDK + Build tools
+        run: |
+          yes | sdkmanager "platforms;android-33" "build-tools;33.0.2"
+
       - name: "Setup gradle"
         uses: "gradle/actions/setup-gradle@v6"
 
