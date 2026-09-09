@@ -68,11 +68,11 @@ val dex = tasks.register("dex") {
 
     doLast {
         val d8 = if(isWindows) "d8.bat" else "d8"
-        print(d8)
+        print("d8 = " + d8)
         val d8Path = if(sdkRoot.isNotEmpty()) sdkRoot + "/build-tools/33.0.3/" + d8 else d8
-        print(d8Path)
+        print("d8Path = " + d8Path)
         val androidJar = if(sdkRoot.isNotEmpty()) sdkRoot + "/platforms/android-33/android.jar" else "android.jar"
-        print(androidJar)
+        print("androidJar = " + androidJar)
 
         print("sdkRoot = " + sdkRoot)
         print("and" + File(sdkRoot).absolutePath)
