@@ -56,7 +56,7 @@ val dex = tasks.register("dex") {
 
     val sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT")
     
-    val output = layout.buildDirectory.file("libs/dex.jar")
+    val output = layout.buildDirectory.file("libs/dex.zip")
     outputs.file(output)
 
     doLast {
@@ -85,7 +85,7 @@ tasks.register<Jar>("deploy") { // include jar and dex -> jar
     archiveFileName.set(project.name + ".jar")
 
     from(zipTree(jar.get().archiveFile))
-    from(zipTree(layout.buildDirectory.file("libs/dex.jar")))
+    from(zipTree(layout.buildDirectory.file("libs/dex.zip")))
 
     from(dirs.coreDir) {
         include("assets/**")
