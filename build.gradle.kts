@@ -69,7 +69,7 @@ val dex = tasks.register("dex") {
     doLast {
         val d8 = if(isWindows) "d8.bat" else "d8"
         val d8Path = if(sdkRoot.isNotEmpty()) sdkRoot + "/build-tools/30.0.3/" + d8 else d8
-        val androidJar = if(sdkRoot.isNotEmpty()) sdkRoot + "/platforms/android-30/android.jar" else "android.jar"
+        val androidJar = if(sdkRoot.isNotEmpty()) sdkRoot + "/platforms/android-33/android.jar" else "android.jar"
 
         if(!File(d8Path).exists()) throw GradleException("d8 doesnt exist")
 
