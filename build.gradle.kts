@@ -51,11 +51,11 @@ val jar = tasks.named<Jar>("jar") { // override jar task -> jar
     from(sourceSets.main.get().output)
 }
 
-fun buildDir(String fi): File {
+fun buildDir(fi: String): File {
     return layout.buildDirectory.file(fi).get().asFile
 }
 
-fun buildDirProv(String fi): Provider<RegularFile> {
+fun buildDirProv(fi: String): Provider<RegularFile> {
     return layout.buildDirectory.file(fi)
 }
 
