@@ -1,11 +1,8 @@
 import org.gradle.jvm.tasks.Jar
 import java.nio.file.*
-import java.net.HttpURLConnection
-import java.net.URL
 import java.io.*
 import java.util.zip.*
-import kotlin.random.Random
-import java.util.*;
+import java.util.*
 
 // Mindustry version to depend on.
 // Valid values:
@@ -22,19 +19,17 @@ val javaVersion = "mindustryJavaVersion"
 
 object dirs {
     val coreDir = "core"
+    val assetDir = dirs.coreDir + "/assets"
 
     object source {
         val sourceDir = dirs.coreDir + "/mod/src"
 
         val javaSourceDir = dirs.source.sourceDir + "/java"
     }
-
-    object assets {
-        val assetDir = dirs.coreDir + "/assets"
-    }
 }
 
 sourceSets.main.get().java.srcDirs(dirs.source.javaSourceDir)
+val isWindows = System.getProperty("os.name").lowercase().contains("windows")
 
 java {
     val ver = if(javaVersion == "latest") JavaVersion.entries.last() else if(javaVersion == "mindustryJavaVersion") JavaVersion.VERSION_17 else try {
@@ -47,80 +42,57 @@ java {
     sourceCompatibility = ver
 }
 
-val isWindows = System.getProperty("os.name").lowercase().contains("windows")
-val sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT")
-val desktopJar = layout.buildDirectory.file("libs/" + project.name + "Desktop.jar").get().asFile
-val androidDexZip = layout.buildDirectory.file("libs/" + project.name + "androidDex.zip").get().asFile
-
 dependencies {
     compileOnly(if(mindustryVersion == "be") "Anuken:MindustryBuilds:latest" else "Anuken:Mindustry:" + mindustryVersion)
 }
 
-tasks.register("jarAndroid") {
-    dependsOn("jar")
-    val noAndroidSDK: String = "No valid Android SDK found. Ensure that ANDROID_HOME is set to your Android SDK directory."
-    val noAndroidJar: String = "No android.jar found. Ensure that you have an Android platform installed."
+val jar = tasks.named<Jar>("jar") { // override jar task -> jar
+    archiveFileName.set("jar.jar")
+    from(sourceSets.main.get().output)
+}
 
-    inputs.file(desktopJar)
-    outputs.file(androidDexZip)
+val dex = tasks.register("dex") {
+    dependsOn(jar)
+
+    val sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT")
+    
+    val output = layout.buildDirectory.file("libs/dex.jar")
+    outputs.file(output)
 
     doLast {
-        if(sdkRoot.isNullOrEmpty() || !File(sdkRoot).exists()) throw GradleException(noAndroidSDK)
+        val d8 = if(isWindows) "d8.bat" else "d8"
+        val d8Path = if(sdkRoot.isNotEmpty()) sdkRoot + "/build-tools/30.0.3/" + d8 else d8
+        val androidJar = if(sdkRoot.isNotEmpty()) sdkRoot + "/platforms/android-30/android.jar" else "android.jar"
 
-        val platformRoot = File(sdkRoot +"/platforms/").listFiles().sortedDescending() ?.toList() ?.find {
-                File(it, "android.jar").exists()
-            } ?: throw GradleException(noAndroidJar)
-
-        if(platformRoot == null) throw GradleException(noAndroidJar)
-
-        //collect dependencies needed for desugaring
-        val dependencies = (configurations.compileClasspath.get().files + configurations.runtimeClasspath.get().files + File(platformRoot, "android.jar")).joinToString(" ") { "--classpath " + it.path }
-
-        //dex and desugar files - this requires d8 in your PATH
-        val commands = (if(isWindows) "d8.bat" else "d8") + " " + dependencies + " --min-api 14 --output " + androidDexZip.absolutePath + " " + desktopJar.absolutePath
-        val dexAndDesugar = ProcessBuilder(commands.split(" ")).directory(File("build/libs")).redirectOutput(ProcessBuilder.Redirect.INHERIT).redirectError(ProcessBuilder.Redirect.INHERIT).start()
+        val classpaths = configurations.compileClasspath.get().files + configurations.runtimeClasspath.get().files + File(androidJar)
         
-        val dr = dexAndDesugar.waitFor()
+        val commands = mutableListOf(
+            d8Path, "--min-api", "14", "--output", output.get().asFile.absolutePath, jar.get().archiveFile.get().asFile.absolutePath
+        )
 
-        if(dr != 0) {
-            throw GradleException("dexAndDesugar returned " + dr)
+        classpaths.forEach { file ->
+            commands.add("--classpath")
+            commands.add(file.absolutePath)
         }
+
+        val process = ProcessBuilder(commands).directory(layout.buildDirectory.asFile.get()).redirectOutput(ProcessBuilder.Redirect.INHERIT).redirectError(ProcessBuilder.Redirect.INHERIT).start()
+
+        val result = process.waitFor()
     }
 }
 
-tasks.jar {
-    archiveFileName = project.name + "Desktop.jar"
+tasks.register<Jar>("deploy") { // include jar and dex -> jar
+    archiveFileName.set(project.name + ".jar")
 
-    from({
-        configurations.runtimeClasspath.get().map {
-            if(it.isDirectory()) it else zipTree(it)
-        }
-    })
+    from(zipTree(jar.get().archiveFile))
+    from(zipTree(layout.buildDirectory.file("libs/dex.jar")))
 
-    from(dirs.assets.assetDir + "/") {
-        include("**")
+    from(dirs.coreDir) {
+        include("assets/**")
     }
 
     from(projectDir) {
         include("mod.json")
-    }
-}
-
-tasks.register<Jar>("deploy") {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    dependsOn("jarAndroid")
-
-    archiveFileName = project.name + ".jar"
-
-    from(zipTree(desktopJar))
-
-    from(zipTree(androidDexZip)) {
-        include("classes.dex")
-    }
-
-    doLast {
-        delete(androidDexZip)
-        delete(desktopJar)
     }
 }
 
