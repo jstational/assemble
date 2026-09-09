@@ -51,41 +51,57 @@ val jar = tasks.named<Jar>("jar") { // override jar task -> jar
     from(sourceSets.main.get().output)
 }
 
+fun buildDir(String fi): File {
+    return layout.buildDirectory.file(fi).get().asFile
+}
+
+fun buildDirProv(String fi): Provider<RegularFile> {
+    return layout.buildDirectory.file(fi)
+}
+
 val dex = tasks.register("dex") {
     dependsOn(jar)
 
-    val sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT")
+    val sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT") ?: throw GradleException("SDK env var does not exist")
     
-    val output = layout.buildDirectory.file("libs/dex.zip")
-    outputs.file(output)
+    outputs.file(buildDirProv("libs/dex.zip"))
 
     doLast {
         val d8 = if(isWindows) "d8.bat" else "d8"
         val d8Path = if(sdkRoot.isNotEmpty()) sdkRoot + "/build-tools/30.0.3/" + d8 else d8
         val androidJar = if(sdkRoot.isNotEmpty()) sdkRoot + "/platforms/android-30/android.jar" else "android.jar"
 
+        if(!File(d8Path).exists()) throw GradleException("d8 doesnt exist")
+
+        buildDirProv("libs/dex.zip").get().asFile.parentFile.mkdirs()
+
         val classpaths = configurations.compileClasspath.get().files + configurations.runtimeClasspath.get().files + File(androidJar)
         
         val commands = mutableListOf(
-            d8Path, "--min-api", "14", "--output", output.get().asFile.absolutePath, jar.get().archiveFile.get().asFile.absolutePath
+            d8Path, "--min-api", "14", "--output", buildDir("libs/dex.zip").absolutePath, jar.get().archiveFile.get().asFile.absolutePath
         )
 
         classpaths.forEach { file ->
-            commands.add("--classpath")
-            commands.add(file.absolutePath)
+            if(file.exists()) {
+                commands.add("--classpath")
+                commands.add(file.absolutePath)
+            }
         }
 
         val process = ProcessBuilder(commands).directory(layout.buildDirectory.asFile.get()).redirectOutput(ProcessBuilder.Redirect.INHERIT).redirectError(ProcessBuilder.Redirect.INHERIT).start()
 
         val result = process.waitFor()
+
+        if(!layout.buildDirectory.file("libs/dex.zip").get().getAsFile().exists()) throw GradleException("libs/dex.zip does not exist, also d8 returned " + result)
     }
 }
 
 tasks.register<Jar>("deploy") { // include jar and dex -> jar
+    dependsOn(dex)
     archiveFileName.set(project.name + ".jar")
 
-    from(zipTree(jar.get().archiveFile))
-    from(zipTree(layout.buildDirectory.file("libs/dex.zip")))
+    from(zipTree(buildDirProv("libs/jar.jar")))
+    from(zipTree(buildDirProv("libs/dex.zip")))
 
     from(dirs.coreDir) {
         include("assets/**")
