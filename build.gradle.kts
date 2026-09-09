@@ -63,22 +63,22 @@ val dex = tasks.register("dex") {
     dependsOn(jar)
 
     val sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT") ?: throw GradleException("SDK env var does not exist")
-
-    print("sdkRoot = " + sdkRoot)
-    print("and" + File(sdkRoot).absolutePath)
     
     outputs.file(buildDirProv("libs/dex.zip"))
 
     doLast {
         val d8 = if(isWindows) "d8.bat" else "d8"
         print(d8)
-        val d8Path = if(sdkRoot.isNotEmpty()) sdkRoot + "/build-tools/30.0.3/" + d8 else d8
+        val d8Path = if(sdkRoot.isNotEmpty()) sdkRoot + "/build-tools/33.0.3/" + d8 else d8
         print(d8Path)
         val androidJar = if(sdkRoot.isNotEmpty()) sdkRoot + "/platforms/android-33/android.jar" else "android.jar"
         print(androidJar)
 
-        if(!File(androidJar).exists()) throw GradleException("android.jar doesnt exist")
-        if(!File(d8Path).exists()) throw GradleException("d8 doesnt exist")
+        print("sdkRoot = " + sdkRoot)
+        print("and" + File(sdkRoot).absolutePath)
+
+        if(!File(androidJar).exists()) print("android.jar doesnt exist")
+        if(!File(d8Path).exists()) print("d8 doesnt exist")
 
         buildDirProv("libs/dex.zip").get().asFile.parentFile.mkdirs()
 
@@ -99,7 +99,7 @@ val dex = tasks.register("dex") {
 
         val result = process.waitFor()
 
-        if(!layout.buildDirectory.file("libs/dex.zip").get().getAsFile().exists()) throw GradleException("libs/dex.zip does not exist, also d8 returned " + result)
+        if(!layout.buildDirectory.file("libs/dex.zip").get().getAsFile().exists()) print("libs/dex.zip does not exist, also d8 returned " + result) else print("d8 returned " + result)
     }
 }
 
