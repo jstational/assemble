@@ -6,19 +6,28 @@ import arc.scene.ui.layout.*;
 import arc.*;
 import arc.scene.event.*;
 import arc.input.*;
-import ambl.logic.blocks.*;
+import ambl.logic.cer.*;
+import arc.struct.*;
 
 public class ACanvas extends Table {
-    public boolean dragging;
+    public boolean clicked;
     public ABlock draggingBlock;
-    public AJumpLine draggingJump;
+    public Seq<AJump> jumps;
+    public Seq<ABlock> blocks;
+    public float originX, originY;
 
     public ACanvas() {
         Core.scene.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent e, float x, float y, int p, KeyCode button) {
                 if(button == KeyCode.mouseLeft) {
-                    dragging = true;
+                    clicked = true;
+
+                    block = clickBlock(x, y);
+
+                    if(block != null) {
+                        
+                    }
                 }
 
                 return super.touchDown(e, x, y, p, button);
@@ -29,7 +38,13 @@ public class ACanvas extends Table {
                 if(button == KeyCode.mouseLeft) {
                     dragging = false;
 
-                    draggingBlock = null;
+                    if(draggingBlock != null) {
+                        blocks.add(draggingBlock);
+
+                        draggingBlock = null;
+
+                        rebuild();
+                    }
                 }
             }
         });
@@ -39,19 +54,23 @@ public class ACanvas extends Table {
 
     public void rebuild() {}
 
-    public void addBlock(ABlock block) {
-        children.add(block);
+    // remove the block at x, y and return it
+    public ABlock dragBlock(float x, float y) {
+        return new ABlock();
     }
 
-    public void removeBlock(ABlock block) {
-        children.remove(block, false);
+    public ABlock clickBlock(float x, float y) {
+        return new ABlock();
     }
 
-    public void addJump(AJumpLine jump) {
-        children.add(jump);
+    public boolean hasBlock(float x, float y) {
+        return false;
     }
 
-    public void removeJump(AJumpLine jump) {
-        children.remove(jump, false);
+    public static class ABlock {
+        public AInstruct instruct;
+        public float x, y, width, height;
+
+        public ABlock() {}
     }
 }
