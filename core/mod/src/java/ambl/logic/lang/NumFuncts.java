@@ -1,6 +1,6 @@
-package ambl.logic.lang.functs;
+package ambl.logic.lang;
 
-public enum MathFuncts {
+public enum NumFuncts {
     // arithmetic
     add, sub,
     mult, div,

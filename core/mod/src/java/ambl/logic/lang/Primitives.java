@@ -22,6 +22,6 @@ public enum Primitives {
     // computation
     number,
     bool,
-    vec2,
-    vec3
+    vec2, // .x, .y
+    vec3 // .x, .y, .z
 }

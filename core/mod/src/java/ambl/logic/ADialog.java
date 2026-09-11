@@ -4,16 +4,20 @@ import mindustry.logic.*;
 import arc.input.*;
 import arc.scene.*;
 import arc.scene.ui.layout.*;
+import arc.*;
 import mindustry.graphics.*;
 import ambl.logic.lists.*;
 import mindustry.gen.*; // this is for the Sounds class
 import mindustry.core.*; // for the GameState class which also has a State enum
 import mindustry.*;
 
-public class ADialog extends LogicDialog {
+public class ADialog extends LogicDialog { // this contains the buttons -> lists -> canvas
     public AVarsList vars;
     public AClassList classes;
-    public Element editor;
+    public AFunctList functs;
+    public AImportList imports;
+    
+    public ACanvas editor;
 
     public ADialog() {
         editor = new ACanvas();
@@ -34,6 +38,8 @@ public class ADialog extends LogicDialog {
                 Vars.state.set(GameState.State.paused);
             }
         });
+
+        Core.scene.addListener(new InputListener() {});
     }
 
     public void setup() {
