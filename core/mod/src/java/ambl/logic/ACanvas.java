@@ -16,7 +16,7 @@ public class ACanvas extends Table { // this contains the context menus -> block
     public ACanvas() {}
 
     public class ADragLayout extends WidgetGroup { // this contains the blocks -> jumps
-
+        
     }
 
     public class ABlock extends Table {
@@ -37,5 +37,9 @@ public class ACanvas extends Table { // this contains the context menus -> block
 
     public static boolean isCompact() {
         return Core.graphics.getWidth() < Scl.scl(900f) * 1.2f;
+    }
+
+    public String save() {
+        return "";
     }
 }
