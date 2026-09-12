@@ -1,4 +1,4 @@
-package ambl.logic.er.*;
+package ambl.logic.er;
 
 import arc.graphics.*;
 import arc.struct.*;
