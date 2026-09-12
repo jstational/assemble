@@ -32,7 +32,6 @@ public class ADialog extends LogicDialog { // this contains the buttons -> lists
         add(buttons).growX().name("canvas");
     }
 
-    @Override
     private void setup() {
         buttons.clearChildren();
         buttons.defaults().size(140f, 40f);
