@@ -5,7 +5,6 @@ import mindustry.*;
 import arc.scene.ui.*;
 import ambl.logic.*;
 import ambl.logic.cer.*;
-import ambl.logic.blocks.*;
 
 public class Assemble extends Mod {
     @Override
@@ -16,8 +15,3 @@ public class Assemble extends Mod {
         }
     }
 }
-
-/**
- * 'clientdata' instruction
- * you can only add it by modifying it in a custom editor ingame or text editor
- */

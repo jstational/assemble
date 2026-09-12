@@ -10,6 +10,7 @@ import ambl.logic.lists.*;
 import mindustry.gen.*; // this is for the Sounds class
 import mindustry.core.*; // for the GameState class which also has a State enum
 import mindustry.*;
+import arc.scene.event.*;
 
 public class ADialog extends LogicDialog { // this contains the buttons -> lists -> canvas
     public AVarsList vars;
