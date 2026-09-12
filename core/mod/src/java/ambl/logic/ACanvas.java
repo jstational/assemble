@@ -38,5 +38,4 @@ public class ACanvas extends Table { // this contains the context menus -> block
     public static boolean isCompact() {
         return Core.graphics.getWidth() < Scl.scl(900f) * 1.2f;
     }
-    }
 }
