@@ -25,7 +25,17 @@ public class ADialog extends LogicDialog { // this contains the buttons -> lists
     public ADialog() {
         super();
 
+        editor = new ACanvas();
+        vars = new AVarsList();
+        classes = new AClassList();
+        functs = new AFunctList();
+        imports = new AImportList();
+
         add(editor).grow().name("canvas"); // test
+        add(vars).name("vars");
+        add(classes).name("classes");
+        add(functs).name("functs");
+        add(imports).name("imports");
 
         row();
 
