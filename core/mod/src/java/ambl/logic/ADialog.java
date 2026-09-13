@@ -32,10 +32,10 @@ public class ADialog extends LogicDialog { // this contains the buttons -> lists
         imports = new AImportList();
 
         add(editor).grow().name("canvas"); // test
-        add(vars).name("vars");
-        add(classes).name("classes");
-        add(functs).name("functs");
-        add(imports).name("imports");
+        add(vars).growY().name("vars"); // left
+        add(classes).growY().name("classes"); // left
+        add(functs).growX().name("functs"); // up
+        add(imports).growY().name("imports"); // right
 
         row();
 
