@@ -9,7 +9,7 @@ import arc.input.*;
 import ambl.logic.cer.*;
 import arc.struct.*;
 
-public class ACanvas extends Table { // this contains the context menus -> blocks -> jumps -> dot grid
+public class ACanvas extends Table { // this contains the context menu -> blocks -> jumps -> dot grid
     public ADragLayout world;
     public Table contextMenu; // only one shall be active at a time
 

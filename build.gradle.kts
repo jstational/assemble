@@ -4,16 +4,16 @@ import java.io.*
 import java.util.zip.*
 import java.util.*
 
+plugins {
+    java
+}
+
 // Mindustry version to depend on.
 // Valid values:
 // - latest: depend on the latest release of mindustry
 // - be: depend on the very latest commit of mindustry
 // - v<number>: depend on a specific commit
 val mindustryVersion = "latest"
-
-plugins {
-    java
-}
 
 val javaVersion = "mindustryJavaVersion"
 
@@ -68,14 +68,8 @@ val dex = tasks.register("dex") {
 
     doLast {
         val d8 = if(isWindows) "d8.bat" else "d8"
-        print("d8 = " + d8)
         val d8Path = if(sdkRoot.isNotEmpty()) sdkRoot + "/build-tools/33.0.3/" + d8 else d8
-        print("d8Path = " + d8Path)
         val androidJar = if(sdkRoot.isNotEmpty()) sdkRoot + "/platforms/android-33/android.jar" else "android.jar"
-        print("androidJar = " + androidJar)
-
-        print("sdkRoot = " + sdkRoot)
-        print("and" + File(sdkRoot).absolutePath)
 
         if(!File(androidJar).exists()) print("android.jar doesnt exist")
         if(!File(d8Path).exists()) print("d8 doesnt exist")
@@ -99,7 +93,8 @@ val dex = tasks.register("dex") {
 
         val result = process.waitFor()
 
-        if(!layout.buildDirectory.file("libs/dex.zip").get().getAsFile().exists()) print("libs/dex.zip does not exist, also d8 returned " + result) else print("d8 returned " + result)
+        if(!buildDirProv("libs/dex.zip").get().getAsFile().exists()) t
+        print("d8 returned " + result)
     }
 }
 

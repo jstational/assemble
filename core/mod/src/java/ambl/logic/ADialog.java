@@ -24,6 +24,7 @@ public class ADialog extends LogicDialog { // this contains the buttons -> lists
 
     public ADialog() {
         super();
+        clearChildren();
 
         editor = new ACanvas();
         vars = new AVarsList();
@@ -40,6 +41,8 @@ public class ADialog extends LogicDialog { // this contains the buttons -> lists
         row();
 
         add(buttons).growX().name("canvas");
+
+        shown(this::setup);
     }
 
     private void setup() {

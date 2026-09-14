@@ -9,13 +9,22 @@ public class ABlockConstructor {
     public int args; // 0: No args, -1: Inf args
     public Color color;
     public String formalName; // the name of the instruction when displayed
-    public ACategory category;
+    public String category;
 
-    public ABlockConstructor(String name, String formal, int cs, int as, Color col, ACategory cate) {
+    public ABlockConstructor(String name, String formal, int cs, int as, Color col, String cate) {
         this.name = name;
         maxComps = cs;
         args = as;
         color = col;
+        this.formalName = formal;
+        category = cate;
+    }
+
+    public ABlockConstructor(String name, String formal, int cs, int as, int r, int g, int b, String cate) {
+        this.name = name;
+        maxComps = cs;
+        args = as;
+        color = new Color(r, g, b);
         this.formalName = formal;
         category = cate;
     }

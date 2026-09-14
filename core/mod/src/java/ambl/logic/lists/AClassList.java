@@ -6,11 +6,11 @@ import arc.struct.*;
 public class AClassList extends Table {
     public AClassList() {}
 
-    public void addClass(String classw) {}
+    public void addItem(String classw) {}
 
-    public void addVar(String var, String classw) {}
+    public void addSubitem(String var, String classw) {}
     
-    public void removeClass(String classw) {}
+    public void removeItem(String classw) {}
 
-    public void removeVar(String var, String classw) {}
+    public void removeSubitem(String var, String classw) {}
 }
