@@ -93,7 +93,7 @@ val dex = tasks.register("dex") {
 
         val result = process.waitFor()
 
-        if(!buildDirProv("libs/dex.zip").get().getAsFile().exists()) t
+        if(!buildDirProv("libs/dex.zip").get().getAsFile().exists()) print("libs/dex.zip does not exist!")
         print("d8 returned " + result)
     }
 }

@@ -13,6 +13,9 @@ import mindustry.*;
 import arc.scene.ui.*;
 import arc.scene.event.*;
 import arc.util.*;
+import ambl.logic.cer.*;
+import ambl.logic.er.*;
+import arc.struct.*;
 
 public class ADialog extends LogicDialog { // this contains the buttons -> lists -> canvas
     public AVarsList vars;
@@ -52,5 +55,45 @@ public class ADialog extends LogicDialog { // this contains the buttons -> lists
         buttons.button("@back", Icon.left, () -> { // default behavior: compile with sugar 
             hide();
         }).name("back"); // hide() is inherited from Dialog, Icon is a generated class
+    }
+
+    public class ACanvas extends Table {
+        public ADragLayout world;
+        public Table contextMenu; // only one shall be active at a time
+        public boolean linking;
+
+        public ACanvas() {}
+
+        public void rebuild() {}
+
+        public static boolean isCompact() {
+            return Core.graphics.getWidth() < Scl.scl(900f) * 1.2f;
+        }
+
+        public String save() {
+            return "";
+        }
+    }
+
+    public class ADragLayout extends WidgetGroup {}
+
+    public class ABlock extends Table {
+        public ABlock() {
+            Core.scene.addListener(new InputListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, KeyCode button) {
+                    if(button == KeyCode.mouseLeft) {
+                        if(linking) {
+                            
+                        } else {
+
+                        }
+                    } // drag or link
+                    if(button == KeyCode.mouseRight) {} // open context menu
+
+                    return false;
+                }
+            });
+        }
     }
 }
