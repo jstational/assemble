@@ -20,7 +20,7 @@ public class ACategories {
         subcas.put(parent, name);
     }
 
-    public class ACategory {
+    public static class ACategory {
         public String formalName;
         public Color color;
         

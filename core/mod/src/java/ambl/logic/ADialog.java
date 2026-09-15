@@ -73,27 +73,27 @@ public class ADialog extends LogicDialog { // this contains the buttons -> lists
         public String save() {
             return "";
         }
-    }
 
-    public class ADragLayout extends WidgetGroup {}
-
-    public class ABlock extends Table {
-        public ABlock() {
-            Core.scene.addListener(new InputListener() {
-                @Override
-                public boolean touchDown(InputEvent event, float x, float y, int pointer, KeyCode button) {
-                    if(button == KeyCode.mouseLeft) {
-                        if(linking) {
+        public class ABlock extends Table {
+            public ABlock() {
+                Core.scene.addListener(new InputListener() {
+                    @Override
+                    public boolean touchDown(InputEvent event, float x, float y, int pointer, KeyCode button) {
+                        if(button == KeyCode.mouseLeft) {
+                            if(linking) {
                             
-                        } else {
+                            } else {
 
-                        }
-                    } // drag or link
-                    if(button == KeyCode.mouseRight) {} // open context menu
+                            }
+                        } // drag or link
+                        if(button == KeyCode.mouseRight) {} // open context menu
 
-                    return false;
-                }
-            });
+                        return false;
+                    }
+                });
+            }
         }
+
+        public class ADragLayout extends WidgetGroup {}
     }
 }

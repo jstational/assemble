@@ -12,6 +12,7 @@ public class ABlockConstructor {
     public int args; // 0: No args, -1: Inf args
     public Color color;
     public String formalName; // the name of the instruction when displayed
+    public String category;
 
     public ABlockConstructor(String name, String formal, int cs, int as, Color col, String cate) {
         this.name = name;
@@ -33,9 +34,5 @@ public class ABlockConstructor {
 
     public AInstruct toInstruct() {
         return new AInstruct();
-    }
-
-    public ABlock toBlock() {
-        return new ABlock();
     }
 }
