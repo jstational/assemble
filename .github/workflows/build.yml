@@ -20,11 +20,9 @@ jobs:
           distribution: "temurin"
 
       - name: "Install SDK"
-        uses: "android-actions/setup-android@v3"
-
-      - name: Install SDK + Build tools
-        run: |
-          yes | sdkmanager "platforms;android-33" "build-tools;33.0.3"
+        uses: "android-actions/setup-android@v4"
+        with:
+          packages: "platform-tools platforms;android-33 build-tools;33.0.3"
 
       - name: "Setup gradle"
         uses: "gradle/actions/setup-gradle@v6"
