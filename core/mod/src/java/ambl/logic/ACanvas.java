@@ -26,6 +26,8 @@ public class ACanvas extends Table { // this contains the context menu
     }
 
     public class ABlock extends Table {
+        public ABlockConstructor type;
+
         public ABlock() {
             super();
 

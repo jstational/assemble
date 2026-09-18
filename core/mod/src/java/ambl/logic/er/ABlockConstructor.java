@@ -13,6 +13,7 @@ public class ABlockConstructor {
     public Color color;
     public String formalName; // the name of the instruction when displayed
     public String category;
+    public String subcategory;
 
     public ABlockConstructor(String name, String formal, int cs, int as, Color col, String cate) {
         this.name = name;

@@ -4,7 +4,8 @@ import arc.struct.*;
 
 public class AMethod {
     public AInstruct start;
-    public Seq<AInstruct> instructs;
+    public Seq<AInstruct> main;
+    public Seq<AJump> mainj;
 
     public AMethod() {}
 }
