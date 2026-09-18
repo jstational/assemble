@@ -15,14 +15,20 @@ public class ACanvas extends Table { // this contains the context menu
     public Table contextMenu; // only one shall be active at a time
     public boolean linking;
 
-    public ACanvas() {}
+    public ACanvas() {
+        super();
+    }
 
     public class ADragLayout extends WidgetGroup { // this contains the blocks -> jumps -> dot grid
-        
+        public ADragLayout() {
+            super();
+        }
     }
 
     public class ABlock extends Table {
         public ABlock() {
+            super();
+
             Core.scene.addListener(new InputListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, KeyCode button) {
