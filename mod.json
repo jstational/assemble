@@ -5,9 +5,10 @@
     "author": "jstational",
     "version": "0.0.1",
     "description": "Swaps the default logic editor with a custom editor",
+    "subtitle": "",
 
     "hidden": true,
-    "minGameVersion": "159.7",
+    "minGameVersion": "160.4",
 
     "java": true,
     "main": "ambl.Assemble",

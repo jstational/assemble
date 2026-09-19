@@ -1,4 +1,4 @@
-package ambl.logic.cer;
+package ambl.logic;
 
 import arc.struct.*;
 
