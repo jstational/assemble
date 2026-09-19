@@ -11,15 +11,13 @@ public class ABlockConstructor {
     public int maxComps;
     public String compCategory; // components must be this category
     public int args;
-    public Color color;
     public String formalName; // the name of the instruction when displayed
     public String category;
 
-    public ABlockConstructor(String name, String formal, int cs, int as, Color col, String cate) {
+    public ABlockConstructor(String name, String formal, int cs, int as, String cate) {
         this.name = name;
         maxComps = cs;
         args = as;
-        color = col;
         this.formalName = formal;
         category = cate;
     }

@@ -4,13 +4,37 @@ import arc.struct.*;
 import ambl.logic.cer.*;
 import ambl.logic.er.*;
 import arc.graphics.*;
+import ambl.graphics.*;
 
 public class AVars {
     private static Seq<ABlockConstructor> blocks = new Seq<>();
     private static Seq<AStruct> structs = new Seq<>();
     private static ObjectMap<String, AMethod> functs = new Seq<>();
+    private static ObjectMap<String, Category> categories = new ObjectMap<>();
 
-    private static Seq<String> internalCategories = new Seq<>(); // subcategories will be parent$name instead
-    private static ObjectMap<String, Color> categoryColors = new ObjectMap<>();
-    private static ObjectMap<String, String> formalCategories = new ObjectMap<>();
+    public static void addCategory(String name, String formalName, Color color) {
+        if(name.isEmpty() || name == null) return;
+        categories.put(name, new Category(name, formalName, color));
+    }
+
+    public static void addCategory(String name, String formalName) {
+        if(name.isEmpty() || name == null) return;
+        addCategory(name, formalName, APal.unknown);
+    }
+
+    public static void addCategory(String name) {
+        if(name.isEmpty() || name == null) return;
+        addCategory(name, Name.substring(0, 1).toUpperCase() + Name.substring(1));
+    }
+
+    public static class Category {
+        public String name, formalName;
+        public @Nullable Color color;
+
+        public Category(String name, String formalName, Color color) {
+            this.name = name;
+            this.formalName = formalName;
+            this.color = color;
+        }
+    }
 }
