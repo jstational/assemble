@@ -9,7 +9,7 @@ import ambl.graphics.*;
 public class AVars {
     private static Seq<ABlockConstructor> blocks = new Seq<>();
     private static Seq<AStruct> structs = new Seq<>();
-    private static ObjectMap<String, AMethod> functs = new Seq<>();
+    private static ObjectMap<String, AMethod> functs = new ObjectMap<>();
     private static ObjectMap<String, Category> categories = new ObjectMap<>();
 
     public static void addCategory(String name, String formalName, Color color) {
@@ -24,12 +24,12 @@ public class AVars {
 
     public static void addCategory(String name) {
         if(name.isEmpty() || name == null) return;
-        addCategory(name, Name.substring(0, 1).toUpperCase() + Name.substring(1));
+        addCategory(name, name.substring(0, 1).toUpperCase() + name.substring(1));
     }
 
     public static class Category {
         public String name, formalName;
-        public @Nullable Color color;
+        public Color color;
 
         public Category(String name, String formalName, Color color) {
             this.name = name;

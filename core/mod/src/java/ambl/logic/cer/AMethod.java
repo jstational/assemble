@@ -8,7 +8,7 @@ public class AMethod {
     public Seq<AJump> mainj;
 
     public AMethod() {
-        main = new Seq<>();
+        main = new IntMap<>();
         mainj = new Seq<>();
     }
 

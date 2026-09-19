@@ -1,4 +1,4 @@
-package ambl;
+package ambl.graphics;
 
 import arc.graphics.*;
 

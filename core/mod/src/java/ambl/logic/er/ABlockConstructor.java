@@ -4,7 +4,6 @@ import arc.struct.*;
 import arc.graphics.*;
 import ambl.logic.cer.*;
 import ambl.logic.*;
-import ambl.logic.ACanvas.*;
 
 public class ABlockConstructor {
     public String name; // the internal name of the instruction
