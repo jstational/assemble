@@ -25,6 +25,12 @@ public class ADialog extends LogicDialog { // this contains the buttons -> lists
 
     public ADialog() {
         super();
+
+        editor = new ACanvas();
+        vars = new StringList();
+        classes = new StringList();
+        functs = new StringList();
+
         clearChildren();
 
         add(buttons).growX().name("canvas");

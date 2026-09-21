@@ -13,18 +13,17 @@ public class AVars {
     private static ObjectMap<String, Category> categories = new ObjectMap<>();
 
     public static void addCategory(String name, String formalName, Color color) {
-        if(name.isEmpty() || name == null) return;
-        categories.put(name, new Category(name, formalName, color));
+        if(isValidCategory(name)) categories.put(name, new Category(name, formalName, color));
     }
 
-    public static void addCategory(String name, String formalName) {
-        if(name.isEmpty() || name == null) return;
-        addCategory(name, formalName, APal.unknown);
+    public static void removeCategory(String name) {
+        categories.remove(name);
     }
 
-    public static void addCategory(String name) {
-        if(name.isEmpty() || name == null) return;
-        addCategory(name, name.substring(0, 1).toUpperCase() + name.substring(1));
+    public static void addStruct(String name, Color color) {}
+
+    private static boolean isValidCategory(String name) {
+        return name != null || !name.isEmpty() ||name.matches("[\\w$]");
     }
 
     public static class Category {
