@@ -5,7 +5,7 @@ import arc.struct.*;
 public class AMethod {
     public String name;
     public IntMap<AInstruct> main;
-    public Seq<AJump> mainj;
+    public IntMap<AJump> mainj;
 
     public AMethod() {
         main = new IntMap<>();
@@ -22,6 +22,10 @@ public class AMethod {
 
     public void addJump(int start, int end) {
         if(!main.containsKey(start) || !main.containsKey(end)) return;
-        mainj.add(new AJump(start, end));
+        mainj.put(start, new AJump(start, end));
+    }
+
+    public void removeJump(int start) {
+        mainj.remove(start);
     }
 }

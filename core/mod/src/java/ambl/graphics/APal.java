@@ -8,4 +8,5 @@ public final class APal {
     public static final Color unknown = new Color(0x858585ff);
     public static final Color world = new Color(0xfff196ff);
     public static final Color flow = new Color(0x96c3ffff);
+    public static final Color decl = new Color(0xa1ffcdff);
 }

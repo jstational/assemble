@@ -5,9 +5,11 @@ import arc.graphics.*;
 
 public class AStruct {
     public ObjectMap<String, AMethod> methods;
+    public String name;
 
-    public AStruct() {
+    public AStruct(String name) {
         this.methods = new ObjectMap<>();
+        this.name = name;
     }
 
     public void addMethod(AMethod method) {

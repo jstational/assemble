@@ -8,22 +8,36 @@ import ambl.graphics.*;
 
 public class AVars {
     private static Seq<ABlockConstructor> blocks = new Seq<>();
-    private static Seq<AStruct> structs = new Seq<>();
+    private static ObjectMap<String, AStruct> structs = new ObjectMap<>();
     private static ObjectMap<String, AMethod> functs = new ObjectMap<>();
     private static ObjectMap<String, Category> categories = new ObjectMap<>();
 
     public static void addCategory(String name, String formalName, Color color) {
-        if(isValidCategory(name)) categories.put(name, new Category(name, formalName, color));
+        if(isValidInternalName(name)) categories.put(name, new Category(name, formalName, color));
     }
 
     public static void removeCategory(String name) {
         categories.remove(name);
     }
 
-    public static void addStruct(String name, Color color) {}
+    public static void addStruct(String name) {
+        if(isValidInternalName(name)) structs.put(name, new AStruct(name));
+    }
 
-    private static boolean isValidCategory(String name) {
-        return name != null || !name.isEmpty() ||name.matches("[\\w$]");
+    public static void removeStruct(String name) {
+        structs.remove(name);
+    }
+
+    public static void addMethodtoStruct(String name, String method) {
+        structs.get(name).removeMethod(method);
+    }
+
+    public static void removeMethodfromStruct(String name) {
+        structs.get(name).removeMethod(name);
+    }
+
+    private static boolean isValidInternalName(String name) {
+        return name != null || !name.isEmpty() || name.matches("[\\w$]");
     }
 
     public static class Category {
