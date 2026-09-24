@@ -9,10 +9,9 @@ import ambl.graphics.*;
 public class AVars {
     private static Seq<ABlockConstructor> blocks = new Seq<>();
     private static ObjectMap<String, AStruct> structs = new ObjectMap<>();
-    private static ObjectMap<String, AMethod> functs = new ObjectMap<>();
     private static ObjectMap<String, Category> categories = new ObjectMap<>();
 
-    public static void addCategory(String name, String formalName, Color color) {
+    public static void addCategory(String name, String formalName, Color color) { // category$subcategory
         if(isValidInternalName(name)) categories.put(name, new Category(name, formalName, color));
     }
 
@@ -28,15 +27,15 @@ public class AVars {
         structs.remove(name);
     }
 
-    public static void addMethodtoStruct(String name, String method) {
-        structs.get(name).removeMethod(method);
+    public static void addMethodtoStruct(String struct, AMethod method) { // methodName$overload
+        structs.get(struct).addMethod(method);
     }
 
     public static void removeMethodfromStruct(String name) {
         structs.get(name).removeMethod(name);
     }
 
-    private static boolean isValidInternalName(String name) {
+    private static boolean isValidInternalName(String name) { // the user should not be able to make internal names with $ signs, maybe stop this when typing?
         return name != null || !name.isEmpty() || name.matches("[\\w$]");
     }
 
