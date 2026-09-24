@@ -9,7 +9,7 @@ public class AMethod {
 
     public AMethod() {
         main = new IntMap<>();
-        mainj = new Seq<>();
+        mainj = new IntMap<>();
     }
 
     public void addInstruct(AInstruct instruct) {
