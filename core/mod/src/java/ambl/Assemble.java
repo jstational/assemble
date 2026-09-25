@@ -4,7 +4,6 @@ import mindustry.mod.*;
 import mindustry.*;
 import arc.scene.ui.*;
 import ambl.logic.*;
-import ambl.logic.cer.*;
 
 public class Assemble extends Mod {
     @Override

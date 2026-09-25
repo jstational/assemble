@@ -12,8 +12,6 @@ import mindustry.*;
 import arc.scene.ui.*;
 import arc.scene.event.*;
 import arc.util.*;
-import ambl.logic.cer.*;
-import ambl.logic.er.*;
 import arc.struct.*;
 
 public class ADialog extends LogicDialog { // this contains the buttons -> lists -> canvas
@@ -63,30 +61,6 @@ public class ADialog extends LogicDialog { // this contains the buttons -> lists
         public String save() { // TODO
             return "";
         }
-
-        public class ABlock extends Table {
-            public ABlockConstructor type;
-
-            public ABlock() {
-                Core.scene.addListener(new InputListener() {
-                    @Override
-                    public boolean touchDown(InputEvent event, float x, float y, int pointer, KeyCode button) {
-                        if(button == KeyCode.mouseLeft) {
-                            if(linking) {
-                            
-                            } else {
-
-                            }
-                        } // drag or link
-                        if(button == KeyCode.mouseRight) {} // open context menu
-
-                        return false;
-                    }
-                });
-            }
-        }
-
-        public class ADragLayout extends WidgetGroup {}
     }
 
     public static class StringList extends Table {
