@@ -70,14 +70,14 @@ public class ACompiler {
     exp_=12, // expparts... end
 
     // EXPRESSION PARTS
-    start_=13, // expparts... end
+    start_=13; // expparts... end
 
     private static final int object_Ext_cid_ = -1;
 
     private static void reset(String code) {
-        index = 0; nextid = 0, nextcid = 0, line = 1,
+        index = 0; nextid = 0; nextcid = 0; line = 1;
         buffer = code.toCharArray();
-        tokenized = [];
+        tokenized = new int[100];
         strings = new IntMap<>();
         atEnd = false;
     }
