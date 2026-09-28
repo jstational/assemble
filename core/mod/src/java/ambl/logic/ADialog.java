@@ -46,7 +46,6 @@ public class ADialog extends LogicDialog { // this contains the buttons -> lists
     }
 
     public class ACanvas extends Table {
-        public ADragLayout world;
         public Table contextMenu; // only one shall be active at a time
         public boolean linking;
 

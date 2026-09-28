@@ -68,6 +68,7 @@ public class ACompiler {
     return_=4, // exp
     end_=10,
     exp_=12, // expparts... end
+    dot_=14,
 
     // EXPRESSION PARTS
     start_=13; // expparts... end
