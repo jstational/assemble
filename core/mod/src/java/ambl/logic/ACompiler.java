@@ -40,8 +40,8 @@ public class ACompiler {
             case '\t' -> {return 1;}
         }
         if(curchar == '.') {
+            tokenized.add(dot_)
             return 1;
-            tokenized.add(dot_);
         }
 
         if(atEnd && curchar != ';') return 0;
