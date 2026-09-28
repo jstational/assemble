@@ -6,7 +6,7 @@ public class ACompiler {
     private static int index, nextid, nextcid, line;
 
     private static char[] buffer;
-    private static int[] tokenized;
+    private static IntSeq tokenized;
 
     private static IntMap<String> strings;
 
@@ -78,7 +78,7 @@ public class ACompiler {
     private static void reset(String code) {
         index = 0; nextid = 0; nextcid = 0; line = 1;
         buffer = code.toCharArray();
-        tokenized = new int[100];
+        tokenized = new IntSeq<>();
         strings = new IntMap<>();
         atEnd = false;
     }
