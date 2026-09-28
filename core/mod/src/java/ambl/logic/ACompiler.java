@@ -78,7 +78,7 @@ public class ACompiler {
     private static void reset(String code) {
         index = 0; nextid = 0; nextcid = 0; line = 1;
         buffer = code.toCharArray();
-        tokenized = new IntSeq<>();
+        tokenized = new IntSeq();
         strings = new IntMap<>();
         atEnd = false;
     }
