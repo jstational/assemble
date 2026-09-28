@@ -3,26 +3,26 @@ package ambl.logic;
 import arc.struct.*;
 
 public class ACompiler {
-    private static int index = 0, nextid = 0, line = 1;
+    private static int index, nextid, nextcid, line;
 
     private static char[] buffer;
-    private static int[] tokenized = [];
+    private static int[] tokenized;
 
     private static IntMap<String> strings;
 
-    private static boolean atEnd = false;
+    private static boolean atEnd;
 
     private static final String exception = "@EXCEPTION_";
 
     public static String compile(String code, boolean keepMetadata) {
-        buffer = code.toCharArray();
+        reset(code);
 
         while(buffer.length > index) {
             int shiftsize = token();
 
             switch(shiftsize) {
-                case 0 -> return exception + "SEMICOLON_" + line;
-                case -1 -> return exception + "UNKNOWN";
+                case 0 -> {return exception + "SEMICOLON_" + line;}
+                case -1 -> {return exception + "UNKNOWN";}
             }
 
             index += shiftsize;
@@ -35,9 +35,13 @@ public class ACompiler {
         char curchar = buffer[index];
 
         switch(curchar) {
-            case ' ' -> return 1;
-            case '\n' -> line++; return 1;
-            case '\t' -> return 1;
+            case ' ' -> {return 1;}
+            case '\n' -> {line++; return 1;}
+            case '\t' -> {return 1;}
+        }
+        if(curchar == '.') {
+            return 1;
+            tokenized.add(dot_);
         }
 
         if(atEnd && curchar != ';') return 0;
@@ -45,16 +49,36 @@ public class ACompiler {
         return -1;
     }
 
-    final int set_ = 0; // id, exp
-    final int fundec_ = 1; // id args ... end
-    final int classdec_ = 2; // id ... end
-    final int string_ = 3; // id
-    final int end_ = 5;
-    final int false_ = 6;
-    final int final_ = 7;
-    final int true_ = 8;
-    final int dot_  = 9;
-    final int do_ = 10;
+    private static final int 
+    set_=0, // vid exp
+    import_=11, // sid vid
 
-    final int object_Ext_id_ = -1;
+    // MODIFIERS
+    final_=5,
+    static_=6,
+    private_=7,
+    public_=8,
+    default_=9,
+
+    // DECLARATIONS
+    vdec_=1, // vid cid
+    fdec_=2, // fid cid vdec... end code... end
+    cdec_=3, // cid code... end vdec... end fdec... end
+
+    return_=4, // exp
+    end_=10,
+    exp_=12, // expparts... end
+
+    // EXPRESSION PARTS
+    start_=13, // expparts... end
+
+    private static final int object_Ext_cid_ = -1;
+
+    private static void reset(String code) {
+        index = 0; nextid = 0, nextcid = 0, line = 1,
+        buffer = code.toCharArray();
+        tokenized = [];
+        strings = new IntMap<>();
+        atEnd = false;
+    }
 }
