@@ -6,7 +6,7 @@ public class ACompiler {
     private static int index, nextid, nextcid, line;
 
     private static char[] buffer;
-    private static IntSeq tokenized;
+    private static IntSeq tokenized = new IntSeq();
 
     private static IntMap<String> strings;
 
