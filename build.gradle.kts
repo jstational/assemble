@@ -29,6 +29,7 @@ object dirs {
 }
 
 sourceSets.main.get().java.srcDirs(dirs.source.javaSourceDir)
+sourceSets.main.get().resources.srcDirs(dirs.assetDir)
 val isWindows = System.getProperty("os.name").lowercase().contains("windows")
 
 java {
