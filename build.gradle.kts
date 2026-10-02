@@ -19,17 +19,10 @@ val javaVersion = "mindustryJavaVersion"
 
 object dirs {
     val coreDir = "core"
-    val assetDir = dirs.coreDir + "/assets"
-
-    object source {
-        val sourceDir = dirs.coreDir + "/mod/src"
-
-        val javaSourceDir = dirs.source.sourceDir + "/java"
-    }
+    val sourceDir = dirs.coreDir + "/src"
 }
 
-sourceSets.main.get().java.srcDirs(dirs.source.javaSourceDir)
-sourceSets.main.get().resources.srcDirs(dirs.assetDir)
+sourceSets.main.get().java.srcDirs(dirs.source.sourceDir)
 val isWindows = System.getProperty("os.name").lowercase().contains("windows")
 
 java {
@@ -109,6 +102,8 @@ tasks.register<Jar>("deploy") { // include jar and dex -> jar
     from(dirs.coreDir) {
         include("assets/**")
     }
+
+    from(dirs.coreDir + "/assets-root")
 
     from(projectDir) {
         include("mod.json")
