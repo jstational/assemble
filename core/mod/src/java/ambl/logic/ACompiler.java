@@ -10,9 +10,7 @@ public class ACompiler {
 
     private static IntMap<String> strings;
 
-    private static boolean atEnd;
-
-    private static final String exception = "@EXCEPTION_";
+    private static boolean atEnd, inString;
 
     public static String compile(String code, boolean keepMetadata) {
         reset(code);
@@ -21,8 +19,12 @@ public class ACompiler {
             int shiftsize = token();
 
             switch(shiftsize) {
-                case 0 -> {return exception + "SEMICOLON_" + line;}
-                case -1 -> {return exception + "UNKNOWN";}
+                case 0 -> {
+                    return exception + "SEMICOLON_" + line;
+                }
+                case -1 -> {
+                    return exception + "UNKNOWN";
+                }
             }
 
             index += shiftsize;
@@ -35,10 +37,18 @@ public class ACompiler {
         char curchar = buffer[index];
 
         switch(curchar) {
-            case ' ' -> {return 1;}
-            case '\n' -> {line++; return 1;}
-            case '\t' -> {return 1;}
+            case ' ' -> {
+                return 1;
+            }
+            case '\n' -> {
+                line++;
+                return 1;
+            }
+            case '\t' -> {
+                return 1;
+            }
         }
+        
         if(curchar == '.') {
             tokenized.add(dot_);
             return 1;
@@ -82,4 +92,6 @@ public class ACompiler {
         strings = new IntMap<>();
         atEnd = false;
     }
+
+    private static final String exception = "@EXCEPTION_";
 }

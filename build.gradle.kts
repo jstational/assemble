@@ -108,6 +108,11 @@ tasks.register<Jar>("deploy") { // include jar and dex -> jar
 
     from(dirs.coreDir) {
         include("assets/**")
+        exclude("assets/icon.png")
+    }
+
+    from(dirs.assetDir) {
+        include("icon.png")
     }
 
     from(projectDir) {
