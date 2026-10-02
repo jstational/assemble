@@ -124,7 +124,9 @@ public class ACompiler {
 
     private static void reset(String code) {
         index = 0;
-        nextid = 0;
+        nextvid = 0;
+        nextfid = 0;
+        nextsid = 0;
         nextcid = 0;
         buffer = code.toCharArray();
         tokenized = new IntSeq();

@@ -1,4 +1,4 @@
-name: "Deskto Build"
+name: "Desktop Build"
 
 on:
   push:
