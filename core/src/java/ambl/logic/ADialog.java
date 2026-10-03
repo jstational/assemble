@@ -40,7 +40,7 @@ public class ADialog extends LogicDialog { // this contains the buttons -> lists
         buttons.clearChildren();
         buttons.defaults().size(140f, 40f);
 
-        buttons.button("@back", Icon.left, () -> { // default behavior: compile with sugar 
+        buttons.button("@back", Icon.left, () -> { // default behavior: compile with sugar
             hide();
         }).name("back"); // hide() is inherited from Dialog, Icon is a generated class
     }
