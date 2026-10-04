@@ -2,7 +2,7 @@ package ambl.logic;
 
 import arc.struct.*;
 
-/**
+/***
  * NOTE: WHEN COMPILING, START A NEW THREAD TO COMPILE
  */
 public class ACompiler {
@@ -18,20 +18,26 @@ public class ACompiler {
     private char curchar;
 
     public ACompiler(String src) {
-        this.src = srcs;
-        split = new Seq<>(srcs.split("\\s"));
-        splitlen = split.length;
+        this.src = src;
         srclen = src.length();
         code = new StringBuilder();
         tokenized = new Seq<>();
-        index = 0;
+        srcindex = 0;
+        if(srclen > 0) {
+            updatecurchar();
+        }
     }
 
     public String compile() {
-        while(srcindex < srclen) {
+        if(srclen == 0) {
+            return "";
+        }
+        while(ex != -1) {
             int ex = handle();
-            switch ex {
+            switch(ex) {
                 case 1 -> return "EXCEPTION_STRING_INTERRUPTED_BY_END";
+                case 2 -> return "EXCEPTION_UNKNOWN";
+                case 3 -> return "EXCEPTION_STRING_INTERRUPTED_BY_NEWLINE";
             }
         }
 
@@ -39,46 +45,75 @@ public class ACompiler {
     }
 
     public int handle() {
-        if(curchar == '\"') return handleString();
-        updatecurchar();
+        if(curchar == '\"') {
+            if(!nextchar()) return 1;
+            tokenized.add(str_);
+            return handleString();
+        }
+
+        if(curchar == '\n') {
+            srcline++;
+            if(!nextchar()) return -1;
+            return 0;
+        }
+
+        if(curchar == ' ' || curchar == '\t') {
+            srcline++;
+            if(!nextchar()) return -1;
+            return 0;
+        }
+
+        return 2;
     }
 
     // region HANDLERS
 
     public int handleString() {
-        boolean inEscape = false;
         StringBuilder string = new StringBuilder();
-        srcindex++;
-        updatecurchar();
-        while(!inEscape && charAtIndex() != '\"') {
-            try {
-                switch(curchar) {
-                    case '\\' -> inEscape = true;
-                    case 'n' -> {
-                        if(inEscape) {
-                            string.append('\n');
-                        } else {
-                            string.append('n');
-                        }
-                    };
+
+        while(curchar != '\"') { // this handles the case where the string is just empty
+            if(curchar == '\n') return 3;
+
+            if(curchar == '\\') {
+                nextchar();
+                switch(curchar) { // MLOG already handles \n, \\, and \", \uXXXX is also included
+                    case '\"' -> string.append('\"'); // handle this case because its still
                     default -> {
-                        string.append(charAtIndex());
-                        srcindex++;
+                        string.append('\\');
+                        string.append(curchar);
                     }
                 }
-            } catch(OutOfBoundsException) {
-                return 1;
+            } else {
+                string.append(curchar);
             }
+
+            if(!nextchar()) return 1;
         }
+
+        tokenized.add(string.toString());
+        return 0;
     }
 
     // region UTILS
 
-    public char charAtIndex() {
-        return src.charAt(srcindex);
+    public boolean updatecurchar() {
+        char c;
+        try {
+            c = src.charAt(srcindex);
+        } catch(StringIndexOutOfBoundsException e) {
+            return false;
+        }
+        curchar = c;
+        return true;
     }
 
-    public void updatecurchar() {
-        curchar = charAtIndex();
+    public boolean nextchar() {
+        srcindex++;
+        return updatecurchar();
     }
+
+    // region KEYWORDS
+
+    private final String
+    str_ = "STR";
 }
