@@ -35,9 +35,15 @@ public class ACompiler {
         while(ex != -1) {
             int ex = handle();
             switch(ex) {
-                case 1 -> return "EXCEPTION_STRING_INTERRUPTED_BY_END";
-                case 2 -> return "EXCEPTION_UNKNOWN";
-                case 3 -> return "EXCEPTION_STRING_INTERRUPTED_BY_NEWLINE";
+                case 1 -> {
+                    return "EXCEPTION_STRING_INTERRUPTED_BY_END";
+                }
+                case 2 -> {
+                    return "EXCEPTION_UNKNOWN";
+                }
+                case 3 -> {
+                    return "EXCEPTION_STRING_INTERRUPTED_BY_NEWLINE";
+                }
             }
         }
 
@@ -76,7 +82,7 @@ public class ACompiler {
 
             if(curchar == '\\') {
                 nextchar();
-                switch(curchar) { // MLOG already handles \n, \\, and \", \uXXXX is also included
+                switch(curchar) {
                     case '\"' -> string.append('\"'); // handle this case because its still
                     default -> {
                         string.append('\\');
