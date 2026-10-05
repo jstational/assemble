@@ -32,7 +32,7 @@ public class ACompiler {
         if(srclen == 0) {
             return "";
         }
-        int ex;
+        int ex = 0;
         while(ex != -1) {
             ex = handle();
             switch(ex) {
