@@ -32,8 +32,9 @@ public class ACompiler {
         if(srclen == 0) {
             return "";
         }
+        int ex;
         while(ex != -1) {
-            int ex = handle();
+            ex = handle();
             switch(ex) {
                 case 1 -> {
                     return "EXCEPTION_STRING_INTERRUPTED_BY_END";
