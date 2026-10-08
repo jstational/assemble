@@ -1,0 +1,37 @@
+Object
+
+Number
+Boolean
+Null
+
+ID
+  .getID() -> Number
+
+Str
+Color
+  Color(Number, Number, Number) -> Color
+  Color(Number, Number, Number, Number) -> Color
+Team : ID
+  .getColor() -> Color
+Content : ID
+Char : ID
+
+Entity : ID
+  .getHealth() -> Number
+  .getPos() -> Vec2
+  .getContent() -> Content
+Building : Entity
+Unit : Entity
+
+Vec2
+  .x -> Number
+  .y -> Number
+Vec3
+  .x -> Number
+  .y -> Number
+  .z -> Number
+
+PrintOutBuilding : Building
+  .print(String)(Char) -> void
+  .charAt(number) -> Char
+  .setCharAt(number, Char) -> void

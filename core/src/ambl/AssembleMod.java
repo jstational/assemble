@@ -3,13 +3,16 @@ package ambl;
 import mindustry.mod.*;
 import mindustry.*;
 import arc.scene.ui.*;
+import arc.struct.*;
 import ambl.logic.*;
 
-public class Assemble extends Mod {
+public class AssembleMod extends Mod {
     @Override
     public void init() {
         if(!(Vars.mobile || Vars.ios || Vars.android || Vars.testMobile)) {
-            Vars.ui.logic = new ADialog();
+            if(Vars.mods.getMod("LogicSugar") != null) {
+                Vars.ui.logic = new ADialog();
+            }
         }
     }
 }

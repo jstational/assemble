@@ -1,0 +1,6 @@
+object Sample {
+    private Number start = 0;
+    public Number getStart() {
+        return start;
+    }
+}

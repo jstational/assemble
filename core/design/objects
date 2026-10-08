@@ -1,0 +1,4 @@
+Ext
+  .links
+    .getLink(number) -> Building
+    .linkCount() -> number

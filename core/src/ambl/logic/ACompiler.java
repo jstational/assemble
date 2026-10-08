@@ -37,13 +37,13 @@ public class ACompiler {
             ex = handle();
             switch(ex) {
                 case 1 -> {
-                    return "EXCEPTION_STRING_INTERRUPTED_BY_END";
+                    return "EXCEPTION_STRING_INTERRUPTED_BY_END@" + srcline;
                 }
                 case 2 -> {
                     return "EXCEPTION_UNKNOWN";
                 }
                 case 3 -> {
-                    return "EXCEPTION_STRING_INTERRUPTED_BY_NEWLINE";
+                    return "EXCEPTION_STRING_INTERRUPTED_BY_NEWLINE@" + srcline;
                 }
             }
         }
@@ -70,6 +70,13 @@ public class ACompiler {
             return 0;
         }
 
+        if(keyword("class", class_)) return 0;
+        if(keyword("public", pub_)) return 0;
+        if(keyword("private", priv_)) return 0;
+        if(keyword("final", final_)) return 0;
+        if(keyword("interface", interface_)) return 0;
+        if(keyword("static", static_)) return 0;
+
         return 2;
     }
 
@@ -84,7 +91,7 @@ public class ACompiler {
             if(curchar == '\\') {
                 nextchar();
                 switch(curchar) {
-                    case '\"' -> string.append('\"'); // handle this case because its still
+                    case '\"' -> string.append("\\").append('\"'); // handle this case because its still
                     default -> {
                         string.append('\\');
                         string.append(curchar);
@@ -100,6 +107,8 @@ public class ACompiler {
         tokenized.add(string.toString());
         return 0;
     }
+
+    public int handleExpression() {}
 
     // region UTILS
 
@@ -119,8 +128,31 @@ public class ACompiler {
         return updatecurchar();
     }
 
+    public boolean startsWith(String str, int offset) {
+        return src.startsWith(str, offset);
+    }
+
+    public boolean startsWithAtIndex(String str) {
+        return src.startsWith(str, srcindex);
+    }
+
+    public boolean keyword(String str, String add) {
+        if(startsWithAtIndex(str)) {
+            tokenized.add(add);
+            srcindex += str.length();
+            return true;
+        }
+        return false;
+    }
+
     // region KEYWORDS
 
     private final String
-    str_ = "STR";
+    str_ = "STR",
+    class_ = "CLASS",
+    interface_ = "INTERFACE",
+    priv_ = "PRIVATE",
+    pub_ = "PUBLIC",
+    static_ = "STATIC",
+    final_ = "FINAL";
 }
