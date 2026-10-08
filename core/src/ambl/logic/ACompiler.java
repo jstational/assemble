@@ -108,7 +108,9 @@ public class ACompiler {
         return 0;
     }
 
-    public int handleExpression() {}
+    public int handleExpression() {
+        return 0;
+    }
 
     // region UTILS
 

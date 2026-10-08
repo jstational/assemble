@@ -1,0 +1,9 @@
+public class Sample {
+    public int eat(int get) {
+        return get * 2;
+    }
+}
+
+public void main() {
+    Sample sample = new Sample();
+}
