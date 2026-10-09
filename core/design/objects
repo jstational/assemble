@@ -1,4 +1,10 @@
-Ext
-  .links
-    .getLink(number) -> Building
-    .linkCount() -> number
+Math
+  .round(Decimal) -> IntegerDecimal
+  .floor(Decimal) -> IntegerDecimal
+  .ceil(Decimal) -> IntegerDecimal
+
+Self
+  .getipt() -> Integer
+  .setipt(Integer)
+  .getLink(Integer) -> Building
+  .linkCount() -> Integer

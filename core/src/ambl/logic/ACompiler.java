@@ -32,7 +32,9 @@ public class ACompiler {
         if(srclen == 0) {
             return "";
         }
+
         int ex = 0;
+
         while(ex != -1) {
             ex = handle();
             switch(ex) {
@@ -40,10 +42,13 @@ public class ACompiler {
                     return "EXCEPTION_STRING_INTERRUPTED_BY_END@" + srcline;
                 }
                 case 2 -> {
-                    return "EXCEPTION_UNKNOWN";
+                    return "EXCEPTION_UNKNOWN_TOKEN";
                 }
                 case 3 -> {
                     return "EXCEPTION_STRING_INTERRUPTED_BY_NEWLINE@" + srcline;
+                }
+                case 4 -> {
+                    "EXCEPTION_SEMICOLON@" + srcline;
                 }
             }
         }
@@ -54,7 +59,7 @@ public class ACompiler {
     public int handle() {
         if(curchar == '\"') {
             if(!nextchar()) return 1;
-            tokenized.add(str_);
+            token(str_);
             return handleString();
         }
 
@@ -68,6 +73,11 @@ public class ACompiler {
             srcline++;
             if(!nextchar()) return -1;
             return 0;
+        }
+
+        if(Character.isDigit(curchar)) {
+            token(num_);
+            return handleNumber();
         }
 
         if(keyword("class", class_)) return 0;
@@ -89,22 +99,19 @@ public class ACompiler {
             if(curchar == '\n') return 3;
 
             if(curchar == '\\') {
-                nextchar();
-                switch(curchar) {
-                    case '\"' -> string.append("\\").append('\"'); // handle this case because its still
-                    default -> {
-                        string.append('\\');
-                        string.append(curchar);
-                    }
-                }
-            } else {
+                string.append('\\');
                 string.append(curchar);
             }
 
             if(!nextchar()) return 1;
         }
 
-        tokenized.add(string.toString());
+        token(string);
+        return 0;
+    }
+
+    public int handleNumber() {
+        while(Character.isDigit(curchar)) {}
         return 0;
     }
 
@@ -119,7 +126,7 @@ public class ACompiler {
         try {
             c = src.charAt(srcindex);
         } catch(StringIndexOutOfBoundsException e) {
-            return false;
+        return false;
         }
         curchar = c;
         return true;
@@ -140,17 +147,26 @@ public class ACompiler {
 
     public boolean keyword(String str, String add) {
         if(startsWithAtIndex(str)) {
-            tokenized.add(add);
+            token(add);
             srcindex += str.length();
             return true;
         }
         return false;
     }
 
+    public void token(String str) {
+        tokenized.add(str);
+    }
+
+    public void token(StringBuilder str) {
+        tokenized.add(str.toString());
+    }
+
     // region KEYWORDS
 
     private final String
-    str_ = "STR",
+    str_ = "STRING",
+    num_ = "NUMBER"
     class_ = "CLASS",
     interface_ = "INTERFACE",
     priv_ = "PRIVATE",

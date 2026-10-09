@@ -1,37 +1,43 @@
-Object
-
-Number
+Integer
+Decimal
 Boolean
 Null
+ConstArray<T>
+  [Integer] -> T
+  .length -> (Final) Integer
 
 ID
-  .getID() -> Number
-
-Str
+  .getID() -> Integer
+String
+  .length() -> Integer
+ConstString : String
+  .toCharConstArray() -> ConstArray<Char>
 Color
   Color(Number, Number, Number) -> Color
   Color(Number, Number, Number, Number) -> Color
+Char : ID
+IntegerDecimal : Integer
+  .toInteger() -> Integer
+  .toDec() -> Decimal
+Vec2
+  .x -> Decimal
+  .y -> Decimal
+Vec3
+  .x -> Decimal
+  .y -> Decimal
+  .z -> Decimal
+
 Team : ID
   .getColor() -> Color
 Content : ID
-Char : ID
-
 Entity : ID
-  .getHealth() -> Number
+  .getHealth() -> Decimal
   .getPos() -> Vec2
   .getContent() -> Content
 Building : Entity
 Unit : Entity
 
-Vec2
-  .x -> Number
-  .y -> Number
-Vec3
-  .x -> Number
-  .y -> Number
-  .z -> Number
-
 PrintOutBuilding : Building
   .print(String)(Char) -> void
-  .charAt(number) -> Char
-  .setCharAt(number, Char) -> void
+  .charAt(Integer) -> Char
+  .setCharAt(Integer, Char) -> void
