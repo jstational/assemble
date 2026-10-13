@@ -16,6 +16,7 @@ public class ACompiler {
     srcline;
 
     private char curchar;
+    private boolean canReturn;
 
     public ACompiler(String src) {
         this.src = src;
@@ -26,6 +27,7 @@ public class ACompiler {
         if(srclen > 0) {
             updatecurchar();
         }
+        canReturn = false;
     }
 
     public String compile() {
@@ -42,13 +44,16 @@ public class ACompiler {
                     return "EXCEPTION_STRING_INTERRUPTED_BY_END@" + srcline;
                 }
                 case 2 -> {
-                    return "EXCEPTION_UNKNOWN_TOKEN";
+                    return "EXCEPTION_UNKNOWN_TOKEN@" + srcline;
                 }
                 case 3 -> {
                     return "EXCEPTION_STRING_INTERRUPTED_BY_NEWLINE@" + srcline;
                 }
                 case 4 -> {
-                    "EXCEPTION_SEMICOLON@" + srcline;
+                    return "EXCEPTION_SEMICOLON@" + srcline;
+                }
+                case 5 -> {
+                    return "EXCEPTION_CANNOT_RETURN@" + srcline;
                 }
             }
         }
@@ -69,9 +74,14 @@ public class ACompiler {
             return 0;
         }
 
-        if(curchar == ' ' || curchar == '\t') {
+        if(curchar == '\t') {
             srcline++;
             if(!nextchar()) return -1;
+            return 0;
+        }
+
+        if(curchar == ' ') {
+            srcindex++;
             return 0;
         }
 
@@ -86,6 +96,13 @@ public class ACompiler {
         if(keyword("final", final_)) return 0;
         if(keyword("interface", interface_)) return 0;
         if(keyword("static", static_)) return 0;
+        if(keyword("return", return_)) {
+            if(!canReturn) {
+                return 5;
+            }
+            return handleExpression();
+        }
+        if(keywordNoSpace("if", if_)) return handleExpression();
 
         return 2;
     }
@@ -116,6 +133,7 @@ public class ACompiler {
     }
 
     public int handleExpression() {
+        token(expr_);
         return 0;
     }
 
@@ -146,9 +164,18 @@ public class ACompiler {
     }
 
     public boolean keyword(String str, String add) {
+        if(startsWithAtIndex(str + " ")) {
+            token(add);
+            srcindex += str.length() + 1;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean keywordNoSpace(String str, String add) {
         if(startsWithAtIndex(str)) {
             token(add);
-            srcindex += str.length();
+            srcindex += str.length() + 1;
             return true;
         }
         return false;
@@ -166,11 +193,44 @@ public class ACompiler {
 
     private final String
     str_ = "STRING",
-    num_ = "NUMBER"
-    class_ = "CLASS",
-    interface_ = "INTERFACE",
-    priv_ = "PRIVATE",
-    pub_ = "PUBLIC",
+    num_ = "NUMBER",
+    private_ = "PRIVATE",
+    public_ = "PUBLIC",
+    pointer_ = "POINTER",
+    readonly_ = "READ_ONLY"
     static_ = "STATIC",
-    final_ = "FINAL";
+    final_ = "FINAL",
+    if_ = "IF",
+    expr_ = "EXPRESSION",
+    return_ = "RETURN",
+    type_ = "TYPE",
+    generictype_ = "GENERIC_TYPE",
+    generictype_end_ = "GENERIC_TYPE_END",
+    returntype_ = "RETURNTYPE",
+    functdec_ = "FUNCTION_DEC",
+    functbody_ = "FUNCTION_BODY",
+    functbody_end_ = "FUNCTION_BODY_END",
+    paramdec_ = "PARAMETER_DEC",
+    paramdec_end = "PARAMETER_DEC_END",
+    classdec_ = "CLASS_DEC",
+    classbody_ = "CLASS_BODY",
+    classbody_end_ = "CLASS_BODY_END",
+    genericdec_ = "GENERIC_DEC",
+    genericdec_end_ = "GENERIC_DEC_END",
+    vardec_ = "VARIABLE_DEC",
+    packagedec_ = "PACKAGE_DEC",
+    packagebody_ = "PACKAGE_BODY",
+    packagebody_end_ = "PACKAGE_BODY_END",
+    interfacedec_ = "INTERFACE_DEC",
+    interfacebody_ = "INTERFACE_BODY",
+    interfacebody_end_ = "INTERFACE_BODY_END",
+    
+    std_c_int_ = "int",
+    std_c_dec_ = "dec",
+    std_c_bool_ = "bool",
+    std_c_null_ = "null",
+    std_c_constarray = "ConstArray",
+    std_c_conststring = "ConstString",
+    std_c_color = "Color",
+    std_c_char = "Char";
 }

@@ -1,9 +1,0 @@
-public class Sample {
-    public num eat(num get) {
-        return get * 2;
-    }
-}
-
-public main() {
-    Sample sample = new Sample();
-}
