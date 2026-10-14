@@ -194,12 +194,15 @@ public class ACompiler {
     private final String
     str_ = "STRING",
     num_ = "NUMBER",
+    char_ = "CHARACTER",
+
     private_ = "PRIVATE",
     public_ = "PUBLIC",
     pointer_ = "POINTER",
-    readonly_ = "READ_ONLY"
+    readonly_ = "READ_ONLY",
     static_ = "STATIC",
     final_ = "FINAL",
+
     if_ = "IF",
     expr_ = "EXPRESSION",
     return_ = "RETURN",
@@ -207,30 +210,39 @@ public class ACompiler {
     generictype_ = "GENERIC_TYPE",
     generictype_end_ = "GENERIC_TYPE_END",
     returntype_ = "RETURNTYPE",
+
     functdec_ = "FUNCTION_DEC",
     functbody_ = "FUNCTION_BODY",
     functbody_end_ = "FUNCTION_BODY_END",
+
     paramdec_ = "PARAMETER_DEC",
     paramdec_end = "PARAMETER_DEC_END",
+
     classdec_ = "CLASS_DEC",
     classbody_ = "CLASS_BODY",
     classbody_end_ = "CLASS_BODY_END",
+
     genericdec_ = "GENERIC_DEC",
     genericdec_end_ = "GENERIC_DEC_END",
+
     vardec_ = "VARIABLE_DEC",
+
     packagedec_ = "PACKAGE_DEC",
     packagebody_ = "PACKAGE_BODY",
     packagebody_end_ = "PACKAGE_BODY_END",
+
     interfacedec_ = "INTERFACE_DEC",
     interfacebody_ = "INTERFACE_BODY",
     interfacebody_end_ = "INTERFACE_BODY_END",
     
-    std_c_int_ = "int",
-    std_c_dec_ = "dec",
-    std_c_bool_ = "bool",
-    std_c_null_ = "null",
-    std_c_constarray = "ConstArray",
-    std_c_conststring = "ConstString",
-    std_c_color = "Color",
-    std_c_char = "Char";
+    lang_int_ = "int",
+    lang_dec_ = "dec",
+    lang_bool_ = "bool",
+    lang_null_ = "null",
+    lang_constarray = "ConstArray",
+    lang_conststring = "ConstString",
+    lang_color = "Color",
+    std_char = "$std.Char",
+    std_id = "$std.ID",
+    std_content = "$std.Content";
 }
