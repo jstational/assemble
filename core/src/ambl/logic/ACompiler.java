@@ -91,10 +91,10 @@ public class ACompiler {
         }
 
         if(keyword("class", class_)) return 0;
-        if(keyword("public", pub_)) return 0;
-        if(keyword("private", priv_)) return 0;
+        if(keyword("public", public_)) return 0;
+        if(keyword("private", private_)) return 0;
         if(keyword("final", final_)) return 0;
-        if(keyword("interface", interface_)) return 0;
+        if(keyword("interface", interfacedec_)) return 0;
         if(keyword("static", static_)) return 0;
         if(keyword("return", return_)) {
             if(!canReturn) {
@@ -211,16 +211,8 @@ public class ACompiler {
     generictype_end_ = "GENERIC_TYPE_END",
     returntype_ = "RETURNTYPE",
 
-    functdec_ = "FUNCTION_DEC",
-    functbody_ = "FUNCTION_BODY",
-    functbody_end_ = "FUNCTION_BODY_END",
-
     paramdec_ = "PARAMETER_DEC",
     paramdec_end = "PARAMETER_DEC_END",
-
-    classdec_ = "CLASS_DEC",
-    classbody_ = "CLASS_BODY",
-    classbody_end_ = "CLASS_BODY_END",
 
     genericdec_ = "GENERIC_DEC",
     genericdec_end_ = "GENERIC_DEC_END",
@@ -228,12 +220,11 @@ public class ACompiler {
     vardec_ = "VARIABLE_DEC",
 
     packagedec_ = "PACKAGE_DEC",
-    packagebody_ = "PACKAGE_BODY",
-    packagebody_end_ = "PACKAGE_BODY_END",
-
+    functdec_ = "FUNCTION_DEC",
+    classdec_ = "CLASS_DEC",
     interfacedec_ = "INTERFACE_DEC",
-    interfacebody_ = "INTERFACE_BODY",
-    interfacebody_end_ = "INTERFACE_BODY_END",
+    bodystart_ = "BODY_START",
+    bodyend_ = "BODY_END",
     
     lang_int_ = "int",
     lang_dec_ = "dec",
