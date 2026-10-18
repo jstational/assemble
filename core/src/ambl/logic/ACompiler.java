@@ -7,233 +7,81 @@ import arc.struct.*;
  */
 public class ACompiler {
     private StringBuilder code;
-    private Seq<String> tokenized;
+    private IntMap<Seq<String>> splits;
     private final String src;
 
-    private int
-    srclen,
-    srcindex,
-    srcline;
-
-    private char curchar;
-    private boolean canReturn;
+    private int srclen;
 
     public ACompiler(String src) {
         this.src = src;
         srclen = src.length();
         code = new StringBuilder();
-        tokenized = new Seq<>();
-        srcindex = 0;
-        if(srclen > 0) {
-            updatecurchar();
-        }
-        canReturn = false;
+        splits = new IntMap<>();
     }
 
     public String compile() {
-        if(srclen == 0) {
-            return "";
-        }
+        CompileSegmentResult ss = splits();
+        if(!ss.success) return "ERROR" + ss.returnStatus;
+        // once you reach back to the dialog, check if startsWith("ERROR")
 
-        int ex = 0;
+        CompileSegmentResult scb = splitcb();
 
-        while(ex != -1) {
-            ex = handle();
-            switch(ex) {
-                case 1 -> {
-                    return "EXCEPTION_STRING_INTERRUPTED_BY_END@" + srcline;
-                }
-                case 2 -> {
-                    return "EXCEPTION_UNKNOWN_TOKEN@" + srcline;
-                }
-                case 3 -> {
-                    return "EXCEPTION_STRING_INTERRUPTED_BY_NEWLINE@" + srcline;
-                }
-                case 4 -> {
-                    return "EXCEPTION_SEMICOLON@" + srcline;
-                }
-                case 5 -> {
-                    return "EXCEPTION_CANNOT_RETURN@" + srcline;
-                }
-            }
-        }
-
-        return code.toString();
+        return "";
     }
 
-    public int handle() {
-        if(curchar == '\"') {
-            if(!nextchar()) return 1;
-            token(str_);
-            return handleString();
-        }
-
-        if(curchar == '\n') {
-            srcline++;
-            if(!nextchar()) return -1;
-            return 0;
-        }
-
-        if(curchar == '\t') {
-            srcline++;
-            if(!nextchar()) return -1;
-            return 0;
-        }
-
-        if(curchar == ' ') {
-            srcindex++;
-            return 0;
-        }
-
-        if(Character.isDigit(curchar)) {
-            token(num_);
-            return handleNumber();
-        }
-
-        if(keyword("class", class_)) return 0;
-        if(keyword("public", public_)) return 0;
-        if(keyword("private", private_)) return 0;
-        if(keyword("final", final_)) return 0;
-        if(keyword("interface", interfacedec_)) return 0;
-        if(keyword("static", static_)) return 0;
-        if(keyword("return", return_)) {
-            if(!canReturn) {
-                return 5;
+    private CompileSegmentResult splits() {
+        boolean inString = false;
+        boolean inChar = false;
+        boolean inEscape;
+        int index = 0;
+        StringBuilder curstr = new StringBuilder();
+        int atLine = 0;
+        while(index != srclen) {
+            char curchar = charAt(index);
+            if(curchar == '\"' && !inEscape) {
+                inString = !inString;
             }
-            return handleExpression();
-        }
-        if(keywordNoSpace("if", if_)) return handleExpression();
-
-        return 2;
-    }
-
-    // region HANDLERS
-
-    public int handleString() {
-        StringBuilder string = new StringBuilder();
-
-        while(curchar != '\"') { // this handles the case where the string is just empty
-            if(curchar == '\n') return 3;
-
+            if(curchar == '\'' && !inEscape) {
+                inChar = !inChar;
+            }
             if(curchar == '\\') {
-                string.append('\\');
-                string.append(curchar);
+                inEscape = !inEscape;
             }
-
-            if(!nextchar()) return 1;
+            if(curchar == '\n') {
+                if(inString) {
+                    return new CompileSegmentResult("" + atLine + "String interrupted by newline", false);
+                }
+                if(inChar) {
+                    return new CompileSegmentResult("" + atLine + "Char interrupted by newline", false)
+                }
+                atLine++;
+            }
+            if(curchar == ';' && (inString || inChar)) {
+                splits.get(atLine).add(curstr.toString().trim());
+                curstr = new StringBuilder();
+            } else {
+                curstr.append(curchar);
+            }
+            index++;
         }
-
-        token(string);
-        return 0;
+        return new CompileSegmentResult("success", true);
     }
 
-    public int handleNumber() {
-        while(Character.isDigit(curchar)) {}
-        return 0;
+    private CompileSegmentResult splitcb() {
+        return new CompileSegmentResult("success", true);
     }
 
-    public int handleExpression() {
-        token(expr_);
-        return 0;
+    private char charAt(int i) {
+        return src.charAt(i);
     }
 
-    // region UTILS
+    private static class CompileSegmentResult {
+        String returnStatus;
+        boolean success;
 
-    public boolean updatecurchar() {
-        char c;
-        try {
-            c = src.charAt(srcindex);
-        } catch(StringIndexOutOfBoundsException e) {
-        return false;
+        CompileSegmentResult(String rc, boolean s) {
+            returnStatus = rc;
+            success = s;
         }
-        curchar = c;
-        return true;
     }
-
-    public boolean nextchar() {
-        srcindex++;
-        return updatecurchar();
-    }
-
-    public boolean startsWith(String str, int offset) {
-        return src.startsWith(str, offset);
-    }
-
-    public boolean startsWithAtIndex(String str) {
-        return src.startsWith(str, srcindex);
-    }
-
-    public boolean keyword(String str, String add) {
-        if(startsWithAtIndex(str + " ")) {
-            token(add);
-            srcindex += str.length() + 1;
-            return true;
-        }
-        return false;
-    }
-
-    public boolean keywordNoSpace(String str, String add) {
-        if(startsWithAtIndex(str)) {
-            token(add);
-            srcindex += str.length() + 1;
-            return true;
-        }
-        return false;
-    }
-
-    public void token(String str) {
-        tokenized.add(str);
-    }
-
-    public void token(StringBuilder str) {
-        tokenized.add(str.toString());
-    }
-
-    // region KEYWORDS
-
-    private final String
-    str_ = "STRING",
-    num_ = "NUMBER",
-    char_ = "CHARACTER",
-
-    private_ = "PRIVATE",
-    public_ = "PUBLIC",
-    pointer_ = "POINTER",
-    readonly_ = "READ_ONLY",
-    static_ = "STATIC",
-    final_ = "FINAL",
-
-    if_ = "IF",
-    expr_ = "EXPRESSION",
-    return_ = "RETURN",
-    type_ = "TYPE",
-    generictype_ = "GENERIC_TYPE",
-    generictype_end_ = "GENERIC_TYPE_END",
-    returntype_ = "RETURNTYPE",
-
-    paramdec_ = "PARAMETER_DEC",
-    paramdec_end = "PARAMETER_DEC_END",
-
-    genericdec_ = "GENERIC_DEC",
-    genericdec_end_ = "GENERIC_DEC_END",
-
-    vardec_ = "VARIABLE_DEC",
-
-    packagedec_ = "PACKAGE_DEC",
-    functdec_ = "FUNCTION_DEC",
-    classdec_ = "CLASS_DEC",
-    interfacedec_ = "INTERFACE_DEC",
-    bodystart_ = "BODY_START",
-    bodyend_ = "BODY_END",
-    
-    lang_int_ = "int",
-    lang_dec_ = "dec",
-    lang_bool_ = "bool",
-    lang_null_ = "null",
-    lang_constarray = "ConstArray",
-    lang_conststring = "ConstString",
-    lang_color = "Color",
-    std_char = "$std.Char",
-    std_id = "$std.ID",
-    std_content = "$std.Content";
 }
