@@ -52,7 +52,7 @@ public class ACompiler {
                     return new CompileSegmentResult("" + atLine + "String interrupted by newline", false);
                 }
                 if(inChar) {
-                    return new CompileSegmentResult("" + atLine + "Char interrupted by newline", false)
+                    return new CompileSegmentResult("" + atLine + "Char interrupted by newline", false);
                 }
                 atLine++;
             }
