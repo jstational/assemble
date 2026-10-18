@@ -32,7 +32,7 @@ public class ACompiler {
     private CompileSegmentResult splits() {
         boolean inString = false;
         boolean inChar = false;
-        boolean inEscape;
+        boolean inEscape = false;
         int index = 0;
         StringBuilder curstr = new StringBuilder();
         int atLine = 0;
