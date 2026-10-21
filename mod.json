@@ -4,11 +4,11 @@
     "displayName": "Assemble",
     "author": "jstational",
     "version": "0.0.1",
-    "description": "Swaps the default logic editor with a custom text editor with its own language\nif you are not familiar with C-style languages, or even coding, use Logic Sugar instead, or Assertions",
+    "description": "Swaps the default logic editor with a custom text editor with its own language\nif you are not familiar with C-style languages, or even coding, use Logic Sugar instead, or Assertions if idk",
     "subtitle": "",
 
     "hidden": true,
-    "minGameVersion": "160.5",
+    "minGameVersion": "160.7",
 
     "java": true,
     "main": "ambl.AssembleMod",

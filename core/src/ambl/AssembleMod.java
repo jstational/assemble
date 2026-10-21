@@ -10,7 +10,7 @@ public class AssembleMod extends Mod {
     @Override
     public void init() {
         if(!(Vars.mobile || Vars.ios || Vars.android || Vars.testMobile)) {
-            if(Vars.mods.getMod("LogicSugar") != null) {
+            if(Vars.mods.getMod("LogicSugar") == null) {
                 Vars.ui.logic = new ADialog();
             }
         }

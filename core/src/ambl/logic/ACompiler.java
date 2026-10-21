@@ -6,8 +6,9 @@ import arc.struct.*;
  * NOTE: WHEN COMPILING, START A NEW THREAD TO COMPILE
  */
 public class ACompiler {
-    private StringBuilder code;
-    private IntMap<Seq<String>> splits;
+    private StringBuilder compiled;
+    private Seq<String> splitSemicolon;
+    private Seq<String> tokenized;
     private final String src;
 
     private int srclen;
@@ -15,18 +16,17 @@ public class ACompiler {
     public ACompiler(String src) {
         this.src = src;
         srclen = src.length();
-        code = new StringBuilder();
-        splits = new IntMap<>();
+        compiled = new StringBuilder();
+        splitSemicolon = new Seq<>();
+        tokenized = new Seq<>();
     }
 
     public String compile() {
-        CompileSegmentResult ss = splits();
-        if(!ss.success) return "ERROR" + ss.returnStatus;
-        // once you reach back to the dialog, check if startsWith("ERROR")
+        if(!splits().success) return "ERROR" + ss.returnStatus;
+        if(!tokenize().success) return "ERROR" + tcr.returnStatus;
+        if(!simplify().success) return "ERROR" + slr.returnStatus;
 
-        CompileSegmentResult scb = splitcb();
-
-        return "";
+        return compiled.toString();
     }
 
     private CompileSegmentResult splits() {
@@ -35,7 +35,7 @@ public class ACompiler {
         boolean inEscape = false;
         int index = 0;
         StringBuilder curstr = new StringBuilder();
-        int atLine = 0;
+
         while(index != srclen) {
             char curchar = charAt(index);
             if(curchar == '\"' && !inEscape) {
@@ -45,30 +45,55 @@ public class ACompiler {
                 inChar = !inChar;
             }
             if(curchar == '\\') {
+                char nextchar = charAt(index + 1)
+                if((nextchar != 'n' || nextchar != '\'' || nextchar != '\"') && !inEscape) return new CompileSegmentResult("Invalid escape character");
+                if((nextchar != '\s' || nextchar != '\n' || nextchar != '\t') && (!inString || !inChar)) return new CompileSegmentResult("Backslashes can only be used inside string literals")
                 inEscape = !inEscape;
             }
             if(curchar == '\n') {
-                if(inString) {
-                    return new CompileSegmentResult("" + atLine + "String interrupted by newline", false);
-                }
-                if(inChar) {
-                    return new CompileSegmentResult("" + atLine + "Char interrupted by newline", false);
-                }
-                atLine++;
+                if(inString) return new CompileSegmentResult("String literal interrupted by newline", false);
+                if(inChar) return new CompileSegmentResult("Char literal interrupted by newline", false);
             }
             if(curchar == ';' && (inString || inChar)) {
-                splits.get(atLine).add(curstr.toString().trim());
+                splitSemicolon.add(curstr.toString().trim());
                 curstr = new StringBuilder();
             } else {
                 curstr.append(curchar);
             }
             index++;
         }
-        return new CompileSegmentResult("success", true);
+        if(inString) return new CompileSegmentResult("String literal interrupted by end of code");
+        if(inChar) return new CompileSegmentResult("Char literal interrupted by end of code");
+        index = 0;
+
+        while(index != splitSemicolon.size) {
+            String curstatement = splitSemicolon.get(index);
+            index++;
+        }
+
+        return new CompileSegmentResult();
     }
 
-    private CompileSegmentResult splitcb() {
-        return new CompileSegmentResult("success", true);
+    private CompileSegmentResult tokenize() {
+        splitSemicolon = null;
+        return new CompileSegmentResult();
+    }
+
+    private CompileSegmentResult simplify() {
+        return new CompileSegmentResult();
+    }
+
+    private CompileSegmentResult verify() {
+        return new CompileSegmentResult();
+    }
+
+    private CompileSegmentResult toMLOG() {
+        tokenized = null;
+        return new CompileSegmentResult();
+    }
+
+    private CompileSegmentResult simplifyMLOG() {
+        return new CompileSegmentResult();
     }
 
     private char charAt(int i) {
@@ -82,6 +107,14 @@ public class ACompiler {
         CompileSegmentResult(String rc, boolean s) {
             returnStatus = rc;
             success = s;
+        }
+
+        CompileSegmentResult() {
+            this("", true);
+        }
+
+        CompileSegmentResult(String rc) {
+            this(rc, false);
         }
     }
 }
