@@ -53,7 +53,7 @@ val jar = tasks.named<Jar>("jar") { // override jar task -> jar
     from(sourceSets.main.get().output)
 }
 
-val test = tasks.register("test") {
+val test = tasks.register("testAssemble") {
     dependsOn(jar)
 
     val dependenciesJarFile = configurations.compileOnly.get().singleFile

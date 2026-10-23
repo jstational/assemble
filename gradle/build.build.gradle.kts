@@ -157,8 +157,3 @@ repositories {
         }
     }
 }
-
-val test = tasks.register("test") {
-    dependsOn(jar)
-    
-}
