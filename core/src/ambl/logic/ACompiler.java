@@ -2,9 +2,7 @@ package ambl.logic;
 
 import arc.struct.*;
 
-/***
- * NOTE: WHEN COMPILING, START A NEW THREAD TO COMPILE
- */
+// NOTE: WHEN COMPILING, START A NEW THREAD TO COMPILE
 public class ACompiler {
     private StringBuilder compiled;
     private Seq<String> splitSemicolon;
@@ -22,10 +20,16 @@ public class ACompiler {
     }
 
     public String compile() {
-        if(!splits().success) return "ERROR" + ss.returnStatus;
-        if(!tokenize().success) return "ERROR" + tcr.returnStatus;
-        if(!simplify().success) return "ERROR" + slr.returnStatus;
+        CompileSegmentResult csr = splits();
+        if(!csr.success) return "ERROR" + csr.returnStatus;
+        csr = verifySyntax();
+        if(!csr.success) return "ERROR" + csr.returnStatus;
+        csr = tokenize();
+        if(!csr.success) return "ERROR" + csr.returnStatus;
+        csr = simplify();
+        if(!csr.success) return "ERROR" + csr.returnStatus;
 
+        csr = null;
         return compiled.toString();
     }
 
@@ -54,9 +58,18 @@ public class ACompiler {
                 if(inString) return new CompileSegmentResult("String literal interrupted by newline", false);
                 if(inChar) return new CompileSegmentResult("Char literal interrupted by newline", false);
             }
-            if(curchar == ';' && (inString || inChar)) {
+            boolean inStrChar = inString || inChar;
+            if(curchar == ';' && !inStrChar) {
                 splitSemicolon.add(curstr.toString().trim());
                 curstr = new StringBuilder();
+            } else if(curchar == '{' && !inStrChar) {
+                splitSemicolon.add(curstr.toString().trim());
+                curstr = new StringBuilder();
+                splitSemicolon.add('{');
+            } else if(curchar == '}' && !inStrChar) {
+                splitSemicolon.add(curstr.toString().trim());
+                curstr = new StringBuilder();
+                splitSemicolon.add('}');
             } else {
                 curstr.append(curchar);
             }
@@ -66,11 +79,10 @@ public class ACompiler {
         if(inChar) return new CompileSegmentResult("Char literal interrupted by end of code");
         index = 0;
 
-        while(index != splitSemicolon.size) {
-            String curstatement = splitSemicolon.get(index);
-            index++;
-        }
+        return new CompileSegmentResult();
+    }
 
+    private CompileSegmentResult verifySyntax() {
         return new CompileSegmentResult();
     }
 
