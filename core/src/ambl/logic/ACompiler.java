@@ -45,9 +45,9 @@ public class ACompiler {
                 inChar = !inChar;
             }
             if(curchar == '\\') {
-                char nextchar = charAt(index + 1)
+                char nextchar = charAt(index + 1);
                 if((nextchar != 'n' || nextchar != '\'' || nextchar != '\"') && !inEscape) return new CompileSegmentResult("Invalid escape character");
-                if((nextchar != '\s' || nextchar != '\n' || nextchar != '\t') && (!inString || !inChar)) return new CompileSegmentResult("Backslashes can only be used inside string literals")
+                if((nextchar != '\s' || nextchar != '\n' || nextchar != '\t') && (!inString || !inChar)) return new CompileSegmentResult("Backslashes can only be used inside string literals");
                 inEscape = !inEscape;
             }
             if(curchar == '\n') {

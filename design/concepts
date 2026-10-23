@@ -1,0 +1,61 @@
+this language is statically typed with an object oriented paradigm meant to compile to a language without arrays, and mutable strings
+
+classes
+ - can extend multiple classes, inheriting their members
+ - when multiple members from different parents have the same name, it will throw a compile error
+ - can be static, which prevents instantiating ths class
+ - static classes can only have static members
+ - final classes cannot be extended
+ - omit the colon and parents if this is a root class
+ - declaration syntax order: modifiers, identifier, colon, parents, and body
+
+inheritors
+ - inheritors implement abstract methods by overriding them with a implementation
+
+members
+ - can be protected, which only allows inheritors to access it
+   private, which only allows this object to access it
+   static, which only allows one instance of this property
+ - members of the root are automatically static
+ - members are public if there is no access modifier
+
+functions refer to callables that are members of the root
+containers refer to both callables and classes
+
+methods
+ - refers to callables within a class
+ - when declared abstract, it wont have an implementation so calling it will throw a compile error
+   declaring an abstract method in a non-static class wont throw a compile error
+ - final methods cannot be overriden
+
+final properties are constant values
+
+callables
+ - callable parameters can be pointers
+ - when you dont want to return anything, omit the return type
+ - declaration syntax order: modifiers, return type, identifier, parameters within parentheses, and the body
+
+primitives
+ - int
+ - dec
+ - bool
+ - char
+ - conststr
+ - constarr
+
+keywords
+ - stat: for static
+ - prot: for protected
+ - priv: for private
+ - abst: for abstract, only for methods
+ - final: for final
+ - class: for declaring a class
+ - return: for returning in a callable
+
+statements are seperated by semicolons
+container bodies are contained with curly braces
+parameters can be marked pointers by adding '&' before the class
+
+identifiers
+ - can only only numbers, letters, and underscores
+ - cannot start with a number
