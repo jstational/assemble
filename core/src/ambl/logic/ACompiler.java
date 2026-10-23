@@ -65,11 +65,11 @@ public class ACompiler {
             } else if(curchar == '{' && !inStrChar) {
                 splitSemicolon.add(curstr.toString().trim());
                 curstr = new StringBuilder();
-                splitSemicolon.add('{');
+                splitSemicolon.add("{");
             } else if(curchar == '}' && !inStrChar) {
                 splitSemicolon.add(curstr.toString().trim());
                 curstr = new StringBuilder();
-                splitSemicolon.add('}');
+                splitSemicolon.add("}");
             } else {
                 curstr.append(curchar);
             }

@@ -17,10 +17,13 @@ jobs:
           java-version: "17"
           distribution: "temurin"
 
-      - name: "Install SDK"
+      - name: "Install Android SDK and Build tools"
         uses: "android-actions/setup-android@v4"
         with:
           packages: "platform-tools platforms;android-33 build-tools;33.0.3"
+
+      - name: "Extract correct gradle script"
+        run: cp ./gradle/build.build.gradle.kts ./build.gradle.kts
 
       - name: "Setup gradle"
         uses: "gradle/actions/setup-gradle@v6"

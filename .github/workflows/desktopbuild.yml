@@ -19,6 +19,9 @@ jobs:
           java-version: "17"
           distribution: "temurin"
 
+      - name: "Extract correct gradle script"
+        run: cp ./gradle/build.build.gradle.kts ./build.gradle.kts
+
       - name: "Setup gradle"
         uses: "gradle/actions/setup-gradle@v6"
             
