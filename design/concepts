@@ -2,7 +2,7 @@ this language is statically typed with an object oriented paradigm meant to comp
 
 classes
  - can extend multiple classes, inheriting their members
- - when multiple members from different parents have the same name, it will throw a compile error
+ - when multiple members from different parents have the same identifier, it will throw a compile error
  - can be static, which prevents instantiating ths class
  - static classes can only have static members
  - final classes cannot be extended

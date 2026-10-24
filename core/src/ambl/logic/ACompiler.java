@@ -29,7 +29,6 @@ public class ACompiler {
         csr = simplify();
         if(!csr.success) return "ERROR" + csr.returnStatus;
 
-        csr = null;
         return compiled.toString();
     }
 
@@ -77,12 +76,17 @@ public class ACompiler {
         }
         if(inString) return new CompileSegmentResult("String literal interrupted by end of code");
         if(inChar) return new CompileSegmentResult("Char literal interrupted by end of code");
-        index = 0;
 
         return new CompileSegmentResult();
     }
 
     private CompileSegmentResult verifySyntax() {
+        int index = 0;
+
+        while(index != splitSemicolon.size) {
+            index++;
+        }
+
         return new CompileSegmentResult();
     }
 
