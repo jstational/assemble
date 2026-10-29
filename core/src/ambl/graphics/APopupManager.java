@@ -8,15 +8,19 @@ public class APopupManager {
 
     public static void warning(String text, float time) {
         closeCurrent();
+        APopup.create();
     }
+
     public static void error(String text, float time) {
         closeCurrent();
     }
+
     public static void info(String text, float time) {
         closeCurrent();
     }
 
     public static void closeCurrent() {
         if(current == null) return;
+        current.destroy();
     }
 }

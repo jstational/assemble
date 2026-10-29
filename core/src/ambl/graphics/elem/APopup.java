@@ -13,4 +13,6 @@ public class APopup extends Table {
         image = new Image(drawable);
         text = new Label(rt);
     }
+
+    public APopup create() {}
 }

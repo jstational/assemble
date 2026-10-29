@@ -26,13 +26,13 @@ public final class AssembleMod extends Mod {
         });
 
         if(Vars.mobile || Vars.ios || Vars.android || Vars.testMobile || Vars.headless) {
-            APopupManager.error("Assemble could not initialize, you are playing on a mobile or headless device");
+            APopupManager.error("Assemble could not initialize, you are playing on a mobile or headless device", 1);
             return;
         }
 
         for(String curmod : incompatibleMods) {
             if(Vars.mods.getMod(curmod) != null) {
-                APopupManager.error("Assemble could not initialize, incompatible mods are active. See list of incompatible mods in settings");
+                APopupManager.error("Assemble could not initialize, incompatible mods are active. See list of incompatible mods in settings", 1);
             }
         }
 

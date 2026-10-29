@@ -7,47 +7,58 @@ public final class APal {
     public static String paletteDesc, paletteName;
 
     private static Color
-    uiLight2,
-    ui2,
-    uiDark2,
-    uiDarker2,
+    uiLightest,
+    uiLighter,
+    uiLight,
+    ui,
+    uiDark,
+    uiDarker,
+    uiDarkest,
 
-    classcol,
+    modified,
+    deleted,
+    added,
+
+    type,
     callable,
     var,
-
+    identifier,
     comment,
-
     number,
     string,
+    special,
 
-    d1,
-    d2,
-    d3,
-    d4,
-    d5,
-
-    uiDark1,
-    uiDarker1,
-    uiDarkest1;
+    depth1,
+    depth2,
+    depth3;
 
     public static Color getColorByName(String name) {
         if(name == null) return color("000000");
         String namet = name.trim();
         return switch(namet) {
-            case "lightTitanium" -> lightTitanium;
-            case "titanium" -> titanium;
-            case "darkTitanium" -> darkTitanium;
-            case "darkerTitanium" -> darkerTitanium;
+            case "uiLighter" -> uiLighter;
+            case "uiLight" -> uiLight;
+            case "ui" -> ui;
+            case "uiDark" -> uiDark;
+            case "uiDarker" -> uiDarker;
+            case "uiDarkest" -> uiDarkest,
 
-            case "class" -> classcol;
+            case "modified" -> modified;
+            case "deleted" -> deleted;
+            case "added" -> added;
+
+            case "type" -> type;
             case "callable" -> callable;
+            case "var" -> var;
+            case "identifier" -> identifier;
+            case "comment" -> comment;
+            case "number" -> number;
+            case "string" -> string;
+            case "special" -> special;
 
-            case "d1" -> d1;
-            case "d2" -> d2;
-            case "d3" -> d3;
-            case "d4" -> d4;
-            case "d5" -> d5;
+            case "depth1" -> d1;
+            case "depth2" -> d2;
+            case "depth3" -> d3;
 
             default -> color("000000");
         };

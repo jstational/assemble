@@ -19,7 +19,6 @@ public class ACompiler {
         compiled = new StringBuilder();
         splitStatement = new Seq<>();
         tokenized = new Seq<>();
-        metadata = new Registry();
     }
 
     public String compile() {
@@ -75,12 +74,13 @@ public class ACompiler {
         while(index != splitStatement.size) {
             curStatement = splitStatement.get(index);
             if(curStatement.endsWith(".")) return "ERRORMember access interrupted";
-            if(curStatement.endsWith("#")) return "ERRORMalformed macro declaration";
-            if(curStatement.endsWith("@")) return "ERRORMalformed annotation";
+            if(curStatement.equals("#")) return "ERRORMalformed macro declaration";
+            if(curStatement.equals("@")) return "ERRORMalformed annotation";
             if(curStatement.startsWith("return")) {
                 String curCopy = curStatement.substring("return".length()).trim();
                 if(!curCopy.startsWith("(") || !curCopy.endsWith(")")) return "ERRORMalformed return statement";
             }
+            if(curStatement.startsWith("if"))
 
             index++;
         }
