@@ -1,0 +1,28 @@
+{
+    "name": "default",
+    "desc": "Default color palette for Assemble",
+
+    "uiLight2": "6a7ea1",
+    "ui2": "52627d",
+    "uiDark2": "2d3645",
+    "UiDarker2": "1b2029",
+
+    "class": "f9ff8c",
+    "callable": "8cbcff",
+    "var": "ffb294",
+
+    "comment": "3a543a",
+
+    "number": "85ffce",
+    "string": "be85ff",
+
+    "d1": "ff8c8c",
+    "d2": "fff28c",
+    "d3": "94ff8c",
+    "d4": "8cfff0",
+    "d5": "fd8cff",
+
+    "uiDark1": "3d3d3d",
+    "uiDarker1": "292929",
+    "uiDarkest1": "1f1f1f"
+}

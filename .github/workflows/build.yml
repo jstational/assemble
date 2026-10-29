@@ -1,0 +1,40 @@
+name: "Build"
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: "Build"
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - uses: "actions/checkout@v7"
+      
+      - name: "Install JDK"
+        uses: "actions/setup-java@v6"
+        with:
+          java-version: "17"
+          distribution: "temurin"
+
+      - name: "Install Android SDK and Build tools"
+        uses: "android-actions/setup-android@v4"
+        with:
+          packages: "platform-tools platforms;android-33 build-tools;33.0.3"
+
+      - name: "Extract correct gradle script"
+        run: cp ./gradle/build.build.gradle.kts ./build.gradle.kts
+
+      - name: "Setup gradle"
+        uses: "gradle/actions/setup-gradle@v6"
+            
+      - name: "Build"
+        run: |
+          chmod +x ./gradlew
+          ./gradlew deploy
+
+      - name: "Deploy"
+        uses: "actions/upload-artifact@v7"
+        with: 
+          name: "assemble"
+          path: "build/libs/*.jar"
