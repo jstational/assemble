@@ -40,15 +40,15 @@ dependencies {
     compileOnly(if(mindustryVersion == "be") "Anuken:MindustryBuilds:latest" else "Anuken:Mindustry:" + mindustryVersion)
 }
 
-fun buildDir(fi: String): File {
+fun getFileInBuildDir(fi: String): File {
     return getProvInBuildDir(fi).get().asFile
 }
 
-fun buildDirProv(fi: String): Provider<RegularFile> {
+fun getProvInBuildDir(fi: String): Provider<RegularFile> {
     return layout.buildDirectory.file(fi)
 }
 
-val buildSettingString: Array<String> = Files.readString(buildDir("buildSettings").toPath()).split("\\r\\n")
+val buildSettingString: Array<String> = Files.readString(getFileInBuildDir("buildSettings").toPath()).split("\\r\\n")
 
 fun getBuildSetting(name: String): String {
     for(curSetting in buildSettingString) {
