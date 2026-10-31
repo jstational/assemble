@@ -1,2 +1,20 @@
 androidSDKVer 33
 androidBuildToolsVer 33.0.3
+
+# Mindustry version to depend on.
+# Valid values:
+# - latest: depend on the latest release of mindustry
+# - be: depend on the very latest commit of mindustry
+# - v<number>: depend on a specific commit
+mindustryVersion latest
+# Java version
+# Valid values:
+# - latest
+# - mindustryJavaVersion
+# - <number>
+javaVersion mindustryJavaVersion
+
+coreDir core
+sourceDir core/src
+assetDir assets
+rootAssetDir core/assets-root

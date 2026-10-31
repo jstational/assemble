@@ -8,53 +8,17 @@ plugins {
     java
 }
 
-// Mindustry version to depend on.
-// Valid values:
-// - latest: depend on the latest release of mindustry
-// - be: depend on the very latest commit of mindustry
-// - v<number>: depend on a specific commit
-val mindustryVersion = "latest"
+val mindustryVersion = getBuildSetting("mindustryVersion")
+val javaVersion = getBuildSetting("javaVersion")
 
-val javaVersion = "mindustryJavaVersion"
+fun getFileInBuildDir(fi: String): File {return getProvInBuildDir(fi).get().asFile}
+fun getProvInBuildDir(fi: String): Provider<RegularFile> {return layout.buildDirectory.file(fi)}
 
-object dirs {
-    val coreDir = "core"
-    val sourceDir = dirs.coreDir + "/src"
-}
-
-sourceSets.main.get().java.srcDirs(dirs.sourceDir)
-val isWindows = System.getProperty("os.name").lowercase().contains("windows")
-
-java {
-    val ver = if(javaVersion == "latest") JavaVersion.entries.last() else if(javaVersion == "mindustryJavaVersion") JavaVersion.VERSION_17 else try {
-        JavaVersion.toVersion(javaVersion)
-    } catch(e: IllegalArgumentException) {
-        JavaVersion.VERSION_17
-    }
-
-    targetCompatibility = ver
-    sourceCompatibility = ver
-}
-
-dependencies {
-    compileOnly(if(mindustryVersion == "be") "Anuken:MindustryBuilds:latest" else "Anuken:Mindustry:" + mindustryVersion)
-}
-
-fun getFileInBuildDir(fi: String): File {
-    return getProvInBuildDir(fi).get().asFile
-}
-
-fun getProvInBuildDir(fi: String): Provider<RegularFile> {
-    return layout.buildDirectory.file(fi)
-}
-
-val buildSettingString: Array<String> = Files.readString(getFileInBuildDir("buildSettings").toPath()).split("\\r\\n")
-
+val buildSettingString: Array<String> = Files.readString(getFileInBuildDir("buildSettings").toPath()).split("\\r\\n").filterNot {it.trim().isEmpty() || it.startsWith("#")}.toTypedArray()
 fun getBuildSetting(name: String): String {
     for(curSetting in buildSettingString) {
-        if(curSetting.trim().startsWith(name)) {
-            return curSetting.substring(0, name.length()).trim()
-        }
+        val trimmed: String = curSetting.trim()
+        if(trimmed.startsWith(name)) {return curSetting.substringAfter(" ", missingDelimiterValue("")).trim()}
     }
     return "";
 }
@@ -68,27 +32,21 @@ val jar = tasks.named<Jar>("jar") { // override jar task -> jar
 
 val dex = tasks.register("dex") {
     dependsOn(jar)
-
-    val sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT") ?: throw GradleException("SDK env var does not exist")
     
     outputs.file(getProvInBuildDir("libs/dex.zip"))
 
     doLast {
-        val d8 = if(isWindows) "d8.bat" else "d8"
-        val d8Path = if(sdkRoot.isNotEmpty()) sdkRoot + "/build-tools/33.0.3/" + d8 else d8
-        val androidJar = if(sdkRoot.isNotEmpty()) sdkRoot + "/platforms/android-33/android.jar" else "android.jar"
+        val d8Path = if(sdkRoot.isNotEmpty()) sdkRoot + "/build-tools/" + getBuildSetting("androidBuildToolsVer") + "/" + (if(isWindows) "d8.bat" else "d8") else (if(isWindows) "d8.bat" else "d8")
+        val androidJar = if(sdkRoot.isNotEmpty()) sdkRoot + "/platforms/" + getBuildSetting("androidSDKVer") + "/android.jar" else "android.jar"
 
-        if(!File(androidJar).exists()) print("android.jar doesnt exist")
-        if(!File(d8Path).exists()) print("d8 doesnt exist")
+        val hasD8: Boolean = File(d8Path).exists().also {if(!it) print("d8 is not intalled")}
+        val hasAndroidSDK: Boolean = File(androidJar).exists().also {if(!it) print("android SDK is not installed")}
 
-        if(File(androidJar).exists() && File(d8Path).exists()) {
+        if(hasD8 && hasAndroidSDK) {
             getFileInBuildDir("libs/dex.zip").parentFile.mkdirs()
 
             val classpaths = configurations.compileClasspath.get().files + configurations.runtimeClasspath.get().files + File(androidJar)
-
-            val commands = mutableListOf(
-                d8Path, "--min-api", "14", "--output", buildDir("libs/dex.zip").absolutePath, jar.get().archiveFile.get().asFile.absolutePath
-            )
+            val commands = mutableListOf(d8Path, "--min-api", "14", "--output", getFileInBuildDir("libs/dex.zip").absolutePath, jar.get().archiveFile.get().asFile.absolutePath)
 
             classpaths.forEach { file ->
                 if(file.exists()) {
@@ -98,11 +56,9 @@ val dex = tasks.register("dex") {
             }
 
             val process = ProcessBuilder(commands).directory(layout.buildDirectory.asFile.get()).redirectOutput(ProcessBuilder.Redirect.INHERIT).redirectError(ProcessBuilder.Redirect.INHERIT).start()
-
             val result = process.waitFor()
 
-            if(!getProvInBuildDir("libs/dex.zip").get().getAsFile().exists()) print("libs/dex.zip does not exist!")
-            print("d8 returned " + result)
+            if(!getProvInBuildDir("libs/dex.zip").get().getAsFile().exists()) print("libs/dex.zip does not exist, an error occurred while dexing")
         }
     }
 }
@@ -111,62 +67,52 @@ tasks.register<Jar>("deploy") { // include jar and dex -> jar
     dependsOn(dex)
     archiveFileName.set(project.name + ".jar")
 
-    from(zipTree(buildDirProv("libs/jar.jar")))
+    from(zipTree(getProvInBuildDir("libs/jar.jar")))
 
-    if(buildDir("libs/dex.zip").exists()) {
-        from(zipTree(buildDirProv("libs/dex.zip")))
-    }
+    if(getFileInBuildDir("libs/dex.zip").exists()) {from(zipTree(getProvInBuildDir("libs/dex.zip")))}
 
-    from(dirs.coreDir) {
-        include("assets/**")
-    }
-
-    from(dirs.coreDir + "/assets-root")
-
-    from(projectDir) {
-        include("mod.json")
-    }
+    from(dirs.coreDir) {include(getBuildSetting("assetDir"))}
+    from(getBuildSetting("rootAssetDir"))
+    from(projectDir) {include("mod.json")}
 }
 
+dependencies {
+    compileOnly(if(mindustryVersion == "be") "Anuken:MindustryBuilds:latest" else "Anuken:Mindustry:" + mindustryVersion)
+}
 repositories {
     mavenCentral()
 
     //Downloads the dependencies JAR file from Mindustry releases; does not use any real repository. Surprisingly, this is the most reliable option.
     ivy {
         url = uri("https://github.com/")
-
-        patternLayout {
-            artifact("/[organisation]/[module]/releases/download/[revision]/dependencies.jar")
-        }
-
-        metadataSources {
-            artifact()
-        }
+        patternLayout {artifact("/[organisation]/[module]/releases/download/[revision]/dependencies.jar")}
+        metadataSources {artifact()}
     }
 
     //If the version is set to "latest", downloads the latest Mindustry *release* as a dependency
     ivy {
         url = uri("https://github.com/")
-
-        patternLayout {
-            artifact("/[organisation]/[module]/releases/[revision]/download/dependencies.jar")
-        }
-
-        metadataSources {
-            artifact()
-        }
+        patternLayout {artifact("/[organisation]/[module]/releases/[revision]/download/dependencies.jar")}
+        metadataSources{artifact()}
     }
 
     //For depending on the absolute newest commit for Mindustry
     ivy {
         url = uri("https://github.com/")
-
-        patternLayout {
-            artifact("/[organisation]/[module]/releases/download/master/[revision].jar")
-        }
-
-        metadataSources {
-            artifact()
-        }
+        patternLayout {artifact("/[organisation]/[module]/releases/download/master/[revision].jar")}
+        metadataSources {artifact()}
     }
 }
+
+java {
+    val ver = if(javaVersion == "latest") JavaVersion.entries.last() else if(javaVersion == "mindustryJavaVersion") JavaVersion.VERSION_17 else try {
+        JavaVersion.toVersion(javaVersion)
+    } catch(e: IllegalArgumentException) {JavaVersion.VERSION_17}
+
+    targetCompatibility = ver
+    sourceCompatibility = ver
+}
+sourceSets.main.get().java.srcDirs(getBuildSetting("sourceDir"))
+
+val isWindows = System.getProperty("os.name").lowercase().contains("windows")
+val sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT")
