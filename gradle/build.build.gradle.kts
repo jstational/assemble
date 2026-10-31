@@ -18,7 +18,7 @@ val buildSettingString: Array<String> = Files.readString(getFileInBuildDir("buil
 fun getBuildSetting(name: String): String {
     for(curSetting in buildSettingString) {
         val trimmed: String = curSetting.trim()
-        if(trimmed.startsWith(name)) {return curSetting.substringAfter(" ", missingDelimiterValue("")).trim()}
+        if(trimmed.startsWith(name)) {return curSetting.substringAfter(" ", missingDelimiterValue = "").trim()}
     }
     return "";
 }
@@ -71,7 +71,7 @@ tasks.register<Jar>("deploy") { // include jar and dex -> jar
 
     if(getFileInBuildDir("libs/dex.zip").exists()) {from(zipTree(getProvInBuildDir("libs/dex.zip")))}
 
-    from(dirs.coreDir) {include(getBuildSetting("assetDir"))}
+    from(getBuildSetting("coreDir")) {include(getBuildSetting("assetDir"))}
     from(getBuildSetting("rootAssetDir"))
     from(projectDir) {include("mod.json")}
 }
