@@ -48,10 +48,10 @@ fun buildDirProv(fi: String): Provider<RegularFile> {
     return layout.buildDirectory.file(fi)
 }
 
-val buildSettingString: String[] = Files.readString(buildDir("buildSettings").toPath()).split("\\r\\n")
+val buildSettingString: Array<String> = Files.readString(buildDir("buildSettings").toPath()).split("\\r\\n")
 
 fun getBuildSetting(name: String): String {
-    for(curSetting : buildSettingString) {
+    for(curSetting in buildSettingString) {
         if(curSetting.trim().startsWith(name)) {
             return curSetting.substring(0, name.length()).trim()
         }
