@@ -1,5 +1,6 @@
 {
     "name": "default",
+    "displayName": "Default",
     "desc": "Default color palette for Assemble",
 
     "uiLight2": "6a7ea1",

@@ -1,14 +1,14 @@
 package ambl.graphics;
 
 import arc.*;
+
 import ambl.graphics.elem.*;
 
-public class APopupManager {
+public final class APopupManager {
     private static APopup current;
 
     public static void warning(String text, float time) {
         closeCurrent();
-        APopup.create();
     }
 
     public static void error(String text, float time) {

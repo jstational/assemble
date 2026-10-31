@@ -1,12 +1,13 @@
 package ambl.logic;
 
 import mindustry.logic.*;
-import arc.scene.ui.*;
-import arc.scene.event.*;
 import mindustry.*;
 import mindustry.core.*;
 import mindustry.game.*;
 import mindustry.gen.*;
+
+import arc.scene.ui.*;
+import arc.scene.event.*;
 import arc.func.Cons;
 
 public class ADialog extends LogicDialog {

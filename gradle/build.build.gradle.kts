@@ -40,17 +40,30 @@ dependencies {
     compileOnly(if(mindustryVersion == "be") "Anuken:MindustryBuilds:latest" else "Anuken:Mindustry:" + mindustryVersion)
 }
 
-val jar = tasks.named<Jar>("jar") { // override jar task -> jar
-    archiveFileName.set("jar.jar")
-    from(sourceSets.main.get().output)
-}
-
 fun buildDir(fi: String): File {
-    return layout.buildDirectory.file(fi).get().asFile
+    return getProvInBuildDir(fi).get().asFile
 }
 
 fun buildDirProv(fi: String): Provider<RegularFile> {
     return layout.buildDirectory.file(fi)
+}
+
+val buildSettingString: String[] = Files.readString(buildDir("buildSettings").toPath()).split("\\r\\n")
+
+fun getBuildSetting(name: String): String {
+    for(curSetting : buildSettingString) {
+        if(curSetting.trim().startsWith(name)) {
+            return curSetting.substring(0, name.length()).trim()
+        }
+    }
+    return "";
+}
+
+val tools = tasks.register("tools") {}
+
+val jar = tasks.named<Jar>("jar") { // override jar task -> jar
+    archiveFileName.set("jar.jar")
+    from(sourceSets.main.get().output)
 }
 
 val dex = tasks.register("dex") {
@@ -58,7 +71,7 @@ val dex = tasks.register("dex") {
 
     val sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT") ?: throw GradleException("SDK env var does not exist")
     
-    outputs.file(buildDirProv("libs/dex.zip"))
+    outputs.file(getProvInBuildDir("libs/dex.zip"))
 
     doLast {
         val d8 = if(isWindows) "d8.bat" else "d8"
@@ -69,7 +82,7 @@ val dex = tasks.register("dex") {
         if(!File(d8Path).exists()) print("d8 doesnt exist")
 
         if(File(androidJar).exists() && File(d8Path).exists()) {
-            buildDirProv("libs/dex.zip").get().asFile.parentFile.mkdirs()
+            getFileInBuildDir("libs/dex.zip").parentFile.mkdirs()
 
             val classpaths = configurations.compileClasspath.get().files + configurations.runtimeClasspath.get().files + File(androidJar)
 
@@ -88,7 +101,7 @@ val dex = tasks.register("dex") {
 
             val result = process.waitFor()
 
-            if(!buildDirProv("libs/dex.zip").get().getAsFile().exists()) print("libs/dex.zip does not exist!")
+            if(!getProvInBuildDir("libs/dex.zip").get().getAsFile().exists()) print("libs/dex.zip does not exist!")
             print("d8 returned " + result)
         }
     }

@@ -1,12 +1,13 @@
 package ambl.logic;
 
-import arc.struct.*;
-import arc.func.Cons;
-import ambl.*;
 import java.nio.charset.StandardCharsets;
 
-// NOTE: WHEN COMPILING, START A NEW THREAD TO COMPILE
-public class ACompiler {
+import arc.struct.*;
+import arc.func.Cons;
+
+import ambl.*;
+
+public final class ACompiler {
     private StringBuilder compiled;
     private Seq<String> splitStatement;
     private Seq<String> tokenized;
@@ -16,7 +17,7 @@ public class ACompiler {
     public ACompiler(String src) {
         this.src = src;
         srclen = src.length();
-        compiled = new StringBuilder();
+        compiled = new StringBuilder("#amblv" + AssembleMod.version);
         splitStatement = new Seq<>();
         tokenized = new Seq<>();
     }

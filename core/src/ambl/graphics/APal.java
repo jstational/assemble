@@ -4,7 +4,7 @@ import arc.graphics.*;
 import arc.util.serialization.*;
 
 public final class APal {
-    public static String paletteDesc, paletteName;
+    public static String paletteDesc, paletteName, paletteDisplayName;
 
     private static Color
     uiLightest,
@@ -41,7 +41,7 @@ public final class APal {
             case "ui" -> ui;
             case "uiDark" -> uiDark;
             case "uiDarker" -> uiDarker;
-            case "uiDarkest" -> uiDarkest,
+            case "uiDarkest" -> uiDarkest;
 
             case "modified" -> modified;
             case "deleted" -> deleted;
@@ -67,6 +67,8 @@ public final class APal {
     public static void loadPalette(String pal) {
         JsonValue readableJson = new JsonReader().parse(pal);
     }
+
+    public static void init() {}
 
     // helper method
     private static Color color(String col) {
