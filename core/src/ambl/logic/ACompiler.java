@@ -7,7 +7,7 @@ import arc.func.Cons;
 
 import ambl.*;
 
-public final class ACompiler {
+public class ACompiler {
     private StringBuilder compiled;
     private Seq<String> splitStatement;
     private Seq<String> tokenized;

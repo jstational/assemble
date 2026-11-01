@@ -1,11 +1,19 @@
 package ambl.data;
 
-public final class AConfig {
-    public static Fi configDir;
+import arc.files.Fi;
+import arc.util.serialization.*;
+import ambl.AVars;
 
-    private AConfig() {}
+public class AConfig {
+    private Fi config;
+
+    public AConfig() {}
 
     public void init() {
-        configDir = ADataDirs.config;
+        config = ADataDirs.config;
+    }
+
+    public Fi getConfigDir() {
+        return config;
     }
 }

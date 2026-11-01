@@ -8,21 +8,17 @@ import ambl.graphics.APopupManager;
 import ambl.*;
 
 public final class ADataDirs {
-    public static boolean failed = false, isNew = false;
-
-    public static final Fi
-    dataDirectory,
-    libraries,
-    palettes,
-    config;
+    private Fi dataDirectory, libraries, palettes, config;
 
     private ADataDirs() {}
 
     public void init() {
+        boolean failed = false, isNew = false;
+
         dataDirectory = Vars.dataDirectory.child("assemble");
         libraries = dataDirectory.child("libs");
         palettes = dataDirectory.child("pals");
-        config = dataDirectory.child("config");
+        config = dataDirectory.child("config")
 
         if(!dataDirectory.exists()) {
             dataDirectory.mkdirs();
@@ -46,19 +42,15 @@ public final class ADataDirs {
                 APopupManager.error("Palettes directory was found as file", 1);
                 AssembleMod.palettes = false;
             }
+            if(!config.exists()) libraries.mkdirs() else if(!libraries.isDirectory()) {
+                APopupManager.error("Config directory was found as file", 1);
+                AssembleMod.disabled = true;
+                return;
+            }
         }
     }
 
     public void clearAssembleData() {
         if(dataDirectory.exists() || !dataDirectory.isDirectory()) dataDirectory.emptyDirectory();
-    }
-
-    public Fi getPaletteFile(String name) {
-        Fi p = palettes.child(name + ".json")
-        return p.exists() || !p.isDirectory() ? p : null;
-    }
-
-    public Fi getCurrentPaletteFile(String name) {
-
     }
 }
