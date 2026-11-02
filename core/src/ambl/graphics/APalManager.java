@@ -6,12 +6,14 @@ import arc.util.serialization.*;
 import ambl.data.ADataDirs;
 
 public final class APalManager {
-    public static String desc, name, displayName;
+    private static String desc, name, displayName;
 
-    public static APal pal;
+    private static APal pal;
+
+    public static void init() {}
 
     public static Color getColorByName(String name) {
-        if(name == null) return color("000000");
+        if(name == null) return Color.valueOf("000000");
         String namet = name.trim();
         return switch(namet) {
             case "uiLighter" -> pal.uiLighter;
@@ -38,30 +40,30 @@ public final class APalManager {
             case "depth2" -> pal.depth2;
             case "depth3" -> pal.depth3;
 
-            default -> color("000000");
+            default -> Color.valueOf("000000");
         }
     }
 
-    public static void loadPalette(String pal) {
-        if(pal != null) {
-            JsonValue readableJson = new JsonReader().parse(pal);
-        }
+    public static APal getPalette() {
+        return pal;
     }
 
-    public static void init() {}
+    public static void makePaletteFile(Fi file) {}
 
-    // helper method
-    private static Color color(String col) {
-        return Color.valueOf(col);
+    public static void loadPaletteFile(String name) {
+        if(name == null) return;
+        loadPaletteFile(ADataDirs.palettes.child(name));
     }
 
-    public JsonValue getPaletteJSON(String name) {
-        Fi p = ADataDirs.palettes.child(name + ".json");
-        return p.exists() && !p.isDirectory() ? p : null;
+    public static void loadPaletteFile(Fi file) {
+        if(file == null || !file.exists() || file.isDirectory()) return;
+        loadPaletteString(asFile.readString());
     }
 
-    public Fi getCurrentPaletteFile() {
-        Fi p = ADataDirs.config.child("pal.json");
-        return p.exists() && !p.isDirectory() ? p : null;
+    public static void loadPaletteString(String pal) {
+        if(pal == null) return;
+        loadPaletteJson(new JsonReader().parse(pal));
     }
+
+    public static void loadPaletteJson(JsonValue json) {}
 }

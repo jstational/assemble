@@ -4,7 +4,7 @@ import arc.files.Fi;
 import arc.util.serialization.*;
 import ambl.AVars;
 
-public class AConfig {
+public final class AConfig {
     private Fi config;
 
     public AConfig() {}

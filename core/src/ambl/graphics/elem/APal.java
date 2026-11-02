@@ -2,7 +2,7 @@ package ambl.graphics.elem;
 
 import arc.graphics.Color;
 
-public class APal {
+public final class APal {
     public Color
     uiLightest,
     uiLighter,

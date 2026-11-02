@@ -1,7 +1,7 @@
 {
-    "name": "default",
-    "displayName": "Default",
-    "desc": "Default color palette for Assemble",
+    "name": "dark",
+    "displayName": "Dark",
+    "desc": "Default dark color palette for Assemble",
 
     "uiLightest": "94abd4",
     "uiLighter": "7f94ba",

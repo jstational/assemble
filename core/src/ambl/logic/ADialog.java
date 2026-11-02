@@ -10,6 +10,8 @@ import arc.scene.ui.*;
 import arc.scene.event.*;
 import arc.func.Cons;
 
+import ambl.lang.*;
+
 public class ADialog extends LogicDialog {
     public Cons<String> consumerf = str -> {};
     public boolean forceRecompile;

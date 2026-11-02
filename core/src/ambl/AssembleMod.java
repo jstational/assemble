@@ -20,10 +20,13 @@ public final class AssembleMod extends Mod {
     public static boolean
     disabled = false,
     libraries = true,
-    palettes = true;
+    palettes = true,
+    
+    defaultPalette = true,
+    standardExtensions = true;
 
     private final Seq<String> incompatibleMods = Seq.with(
-        "LogicSugar"
+        "LogicSugar", "mlog-assertions-8" /* try to find a way to add compatibility with this mod later on in development, future me */
     );
 
     @Override
