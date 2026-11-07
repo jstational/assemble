@@ -26,7 +26,7 @@ public final class AssembleMod extends Mod {
     standardExtensions = true;
 
     private final Seq<String> incompatibleMods = Seq.with(
-        "LogicSugar", "mlog-assertions-8" /* try to find a way to add compatibility with this mod later on in development, future me */
+        "LogicSugar", "mlog-assertions-8"
     );
 
     @Override

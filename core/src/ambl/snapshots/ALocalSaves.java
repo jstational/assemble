@@ -1,4 +1,4 @@
-package ambl.data;
+package ambl.snapshots;
 
 import mindustry.world.blocks.logic.LogicBlock.*;
 

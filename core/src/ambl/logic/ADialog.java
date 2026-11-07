@@ -60,11 +60,8 @@ public class ADialog extends LogicDialog {
                 modified.get(compiled);
             }
         };
-        try {
-            canvas.editor.load(code);
-        } catch(Throwable ex) {
-            canvas.editor.loadRaw(code);
-        }
+        
+        // TODO
 
         show();
     }
@@ -72,7 +69,10 @@ public class ADialog extends LogicDialog {
     @Override
     public void hide() {
         if(canvas != null && canvas.editor != null) {
-            consumerf.get(new ACompiler(canvas.editor.getText()).compile());
+
+            // TODO
+
+            consumerf.get("");
         }
 
         super.hide();

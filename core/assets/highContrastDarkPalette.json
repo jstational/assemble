@@ -1,5 +1,29 @@
 {
     "name": "hcdark",
     "displayName": "High contrast dark",
-    "desc": "Default high contrast dark color palette for Assemble"
+    "desc": "Default high contrast dark color palette for Assemble",
+
+    "uiLightest": "5181d6",
+    "uiLighter": "3c67b5",
+    "uiLight": "",
+    "ui": "",
+    "uiDark": "",
+    "uiDarker": "",
+    "uiDarkest": "",
+
+    "modified": "",
+    "deleted": "",
+    "added": "",
+    
+    "type": "",
+    "callable": "",
+    "var": "",
+    "comment": "",
+    "number": "",
+    "string": "",
+    "special": "",
+
+    "depth1": "",
+    "depth2": "",
+    "depth3": ""
 }

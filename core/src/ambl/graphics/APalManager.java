@@ -3,7 +3,7 @@ package ambl.graphics;
 import arc.graphics.*;
 import arc.util.serialization.*;
 
-import ambl.data.ADataDirs;
+import ambl.data.ADataManager;
 
 public final class APalManager {
     private static String desc, name, displayName;
@@ -48,22 +48,22 @@ public final class APalManager {
         return pal;
     }
 
-    public static void makePaletteFile(Fi file) {}
+    public static void savePalette(Fi file) {}
 
-    public static void loadPaletteFile(String name) {
+    public static void loadPalette(String name) {
         if(name == null) return;
         loadPaletteFile(ADataDirs.palettes.child(name));
     }
 
-    public static void loadPaletteFile(Fi file) {
+    public static void loadPalette(Fi file) {
         if(file == null || !file.exists() || file.isDirectory()) return;
         loadPaletteString(asFile.readString());
     }
 
-    public static void loadPaletteString(String pal) {
+    public static void loadPalette(String pal) {
         if(pal == null) return;
         loadPaletteJson(new JsonReader().parse(pal));
     }
 
-    public static void loadPaletteJson(JsonValue json) {}
+    public static void loadPalette(JsonValue json) {}
 }

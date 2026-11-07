@@ -53,5 +53,7 @@ public class ACanvas extends LCanvas {
         public String getText() {
             return rawText;
         }
+
+        public void rebuild() {}
     }
 }

@@ -18,6 +18,41 @@ public class Pixmaps {
 
     public void packy(Pixmap t, Pixmap[] maps) {
         int width = 0, height = 0;
-        for(Pixmap cur : maps)
+        for(Pixmap cur : maps) {
+            if(cur.width > width) width = cur.width;
+            height = height = cur.height;
+        }
+    }
+
+    public int getTotalWidth(Pixmap[] maps) {
+        int w = 0;
+        for(Pixmap cur : maps) {
+            w = w + cur.width;
+        }
+        return w;
+    }
+
+    public int getTotalHeight(Pixmap[] maps) {
+        int h = 0;
+        for(Pixmap cur : maps) {
+            h = h + cur.height;
+        }
+        return h;
+    }
+
+    public int getGreatestWidth(Pixmap[] maps) {
+        int h = 0;
+        for(Pixmap cur : maps) {
+            if(cur.width > h) h = cur;
+        }
+        return h;
+    }
+
+    public int getGreatestHeight(Pixmap[] maps) {
+        int h = 0;
+        for(Pixmap cur : maps) {
+            if(cur.height > h) h = cur;
+        }
+        return h;
     }
 }

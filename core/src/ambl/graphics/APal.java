@@ -1,8 +1,10 @@
-package ambl.graphics.elem;
+package ambl.graphics;
 
 import arc.graphics.Color;
+import arc.files.Fi;
 
 public final class APal {
+    public String desc, name, displayName;
     public Color
     uiLightest,
     uiLighter,
@@ -27,4 +29,6 @@ public final class APal {
     depth1,
     depth2,
     depth3;
+
+    public void savePalette(Fi file) {}
 }
