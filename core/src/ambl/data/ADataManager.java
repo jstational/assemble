@@ -4,7 +4,7 @@ import mindustry.*;
 
 import arc.files.*;
 
-import ambl.graphics.APopupManager;
+import ambl.graphics.PopupManager;
 import ambl.*;
 
 public final class ADataManager {
@@ -24,7 +24,7 @@ public final class ADataManager {
             dataDirectory.mkdirs();
             isNew = true;
         } else if(!dataDirectory.isDirectory()) {
-            APopupManager.error("Assemble data directory was found as file", 1);
+            PopupManager.error("Assemble data directory was found as file", 1);
             AssembleMod.disabled = true;
             return;
         }
@@ -34,15 +34,15 @@ public final class ADataManager {
             config.mkdirs();
         } else {
             if(!libraries.exists()) libraries.mkdirs() else if(!libraries.isDirectory()) {
-                APopupManager.error("Libraries directory was found as file", 1);
+                PopupManager.error("Libraries directory was found as file", 1);
                 AssembleMod.libraries = false;
             }
             if(!palettes.exists()) libraries.mkdirs() else if(!libraries.isDirectory()) {
-                APopupManager.error("Palettes directory was found as file", 1);
+                PopupManager.error("Palettes directory was found as file", 1);
                 AssembleMod.palettes = false;
             }
             if(!config.exists()) config.mkdirs() else if(config.isDirectory()) {
-                APopupManager.error("Config file was found as directory", 1);
+                PopupManager.error("Config file was found as directory", 1);
                 AssembleMod.disabled = true;
                 return;
             }

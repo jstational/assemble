@@ -8,7 +8,38 @@ plugins {
     java
 }
 
-val tools = tasks.register("tools") {}
+rootProject.name = "assemble"
+
+val buildSettings: Map<String, String> = File(projectDir, "buildSettings").readLines().map{it.trim()}.filterNot{it.isEmpty() || it.startsWith("#")}.associate{it.substringBefore(" ") to it.substringAfter(" ", "").trim()}
+fun getBuildSetting(name: String): String = buildSettings[name] ?: ""
+
+val isWindows: Boolean = System.getProperty("os.name").lowercase().contains("windows")
+val sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT") ?: ""
+
+val assembleVersion: String = getBuildSetting("assembleVersion")
+val mindustryVersion: String = getBuildSetting("mindustryVersion")
+val javaVersion: String = getBuildSetting("javaVersion")
+
+fun getProvInBuildDir(fi: String): Provider<RegularFile> {return layout.buildDirectory.file(fi)}
+fun getFileInBuildDir(fi: String): File {return getProvInBuildDir(fi).get().asFile}
+
+java {
+    val ver = if(javaVersion == "latest") JavaVersion.entries.last() else if(javaVersion == "mindustryJavaVersion") JavaVersion.VERSION_17 else try {JavaVersion.toVersion(javaVersion)} catch(e: IllegalArgumentException) {JavaVersion.VERSION_17}
+    targetCompatibility = ver
+    sourceCompatibility = ver
+}
+sourceSets.main.get().java.srcDirs(getBuildSetting("sourceDir"))
+
+val init = tasks.register("init") {
+    val mainclass: File = getFileInBuildDir("core/src/ambl/AssembleMod.java");
+    mainclass.readText().replaceFirst("0 /* replace this with the version field in buildSettings */", assembleVersion)
+    val modjson: File = getFileInBuildDir("mod.json");
+    mainclass.readText().replaceFirst("insert assemble version here", assembleVersion)
+}
+
+val tools = tasks.register("tools") {
+    dependsOn(init)
+}
 
 val jar = tasks.named<Jar>("jar") {
     dependsOn(tools)
@@ -83,29 +114,4 @@ repositories {
         patternLayout {artifact("/[organisation]/[module]/releases/download/master/[revision].jar")}
         metadataSources {artifact()}
     }
-}
-
-java {
-    val ver = if(javaVersion == "latest") JavaVersion.entries.last() else if(javaVersion == "mindustryJavaVersion") JavaVersion.VERSION_17 else try {JavaVersion.toVersion(javaVersion)} catch(e: IllegalArgumentException) {JavaVersion.VERSION_17}
-    targetCompatibility = ver
-    sourceCompatibility = ver
-}
-sourceSets.main.get().java.srcDirs(getBuildSetting("sourceDir"))
-
-val isWindows: Boolean = System.getProperty("os.name").lowercase().contains("windows")
-val sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT")
-
-val mindustryVersion: String = getBuildSetting("mindustryVersion")
-val javaVersion: String = getBuildSetting("javaVersion")
-
-fun getFileInBuildDir(fi: String): File {return getProvInBuildDir(fi).get().asFile}
-fun getProvInBuildDir(fi: String): Provider<RegularFile> {return layout.buildDirectory.file(fi)}
-
-val buildSettingString: Array<String> = Files.readString(File(projectDir, "buildSettings").toPath()).split("\\r\\n").filterNot {it.trim().isEmpty() || it.startsWith("#")}.toTypedArray()
-fun getBuildSetting(name: String): String {
-    for(curSetting in buildSettingString) {
-        val trimmed: String = curSetting.trim()
-        if(trimmed.startsWith(name)) {return curSetting.substringAfter(" ", missingDelimiterValue = "").trim()}
-    }
-    return "";
 }

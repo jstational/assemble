@@ -9,5 +9,7 @@ public class ADecompiler {
         this.srclen = src.length();
     }
 
-    public String decompile() {}
+    public String decompile() {
+        return "";
+    }
 }

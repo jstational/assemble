@@ -18,3 +18,5 @@ coreDir core
 sourceDir core/src
 assetDir assets
 rootAssetDir core/assets-root
+
+assembleVersion 1

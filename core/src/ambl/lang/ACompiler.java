@@ -1,31 +1,20 @@
 package ambl.logic;
 
-import java.nio.charset.StandardCharsets;
-
 import arc.struct.*;
 import arc.func.Cons;
 
-import ambl.*;
+import ambl.AssembleMod;
 
 public class ACompiler {
-    private final String src;
-    private int srclen;
+    public ACompiler() {}
 
-    private Seq<String> splitStatement, tokenized;
-    private StringBuilder compiled;
+    public String compile(String src) {
+        int srclen = src.length();
+        Seq<String> splitStatement = new Seq<>();
 
-    public ACompiler(String src) {
-        this.src = src;
-        srclen = src.length();
-        compiled = new StringBuilder();
-        splitStatement = new Seq<>();
-        tokenized = new Seq<>();
-    }
-
-    public String compile() {
         int index = 0;
 
-        while(index != srclen) {
+        while(index < srclen) {
             boolean afterSemicolon = true;
             char curchar = charAt(index);
             StringBuilder curstr = new StringBuilder();
@@ -42,22 +31,27 @@ public class ACompiler {
                     if(index >= srclen) return "ERRORString literal interrupted by end of code";
                     while(!endStringSubroutine) {
                         curchar = src.charAt(index);
-                        if(curchar == '\\') {
-                            index++;
-                            if(index >= srclen) return "ERRORString literal interrupted by end of code";
-                            curchar = src.charAt(index);
-                            switch(curchar) {
-                                case 'n' -> curstr.append("\\n");
-                                case '\\' -> curstr.append("\\\\");
-                                case '"' -> curstr.append("\\\"");
-                                case '\'' -> curstr.append("\\'");
-                                default -> return "ERRORInvalid escape character";
+                        switch(curchar) {
+                            case '\\' -> {
+                                index++;
+                                if(index >= srclen) return "ERRORString literal interrupted by end of code";
+                                curchar = src.charAt(index);
+                                switch(curchar) {
+                                    case 'n' -> curstr.append("\\n");
+                                    case '\\' -> curstr.append("\\\\");
+                                    case '"' -> curstr.append("\\\"");
+                                    case '\'' -> curstr.append("\\'");
+                                    default -> return "ERRORInvalid escape character";
+                                }
                             }
-                        } else if(curchar == '"') {
-                            splitStatement.add(curstr);
-                            splitStatement.add("\"");
-                            endStringSubroutine = true;
-                        } else if(curchar == '\n') return "ERRORString literal interrupted by newline" else curstr.append(curchar);
+                            case '"' -> {
+                                splitStatement.add(curstr);
+                                splitStatement.add("\"");
+                                endStringSubroutine = true;
+                            } 
+                            case '\n' -> return "ERRORString literal interrupted by newline";
+                            default -> curstr.append(curchar);
+                        }
                         index++;
                         if(index >= srclen) return "ERRORString literal interrupted by end of code";
                     }
@@ -96,7 +90,7 @@ public class ACompiler {
             index++;
         }
 
-        int index = 0;
+        index = 0;
         String curStatement;
 
         while(index != splitStatement.size) {
@@ -106,26 +100,20 @@ public class ACompiler {
             if(curStatement.equals("@")) return "ERRORMalformed annotation";
             if(curStatement.equals("return")) {
                 index++;
-                String next = splitStatement.get(index)
+                String next = splitStatement.get(index);
                 if(!next.equals("(")) return "ERRORMalformed return statement";
             }
             if(curStatement.equals("if")) {
                 index++;
-                String next = splitStatement.get(index)
+                String next = splitStatement.get(index);
                 if(!next.equals("(")) return "ERRORMalformed if statement";
             }
 
             index++;
         }
 
-        return compiled.toString();
-    }
-    
-    private void addStatement(String st) {
-        compiled.append(st + "\n");
-    }
+        StringBuilder compiled = new StringBuilder();
 
-    private char charAt(int i) {
-        return src.charAt(i);
+        return compiled.toString();
     }
 }

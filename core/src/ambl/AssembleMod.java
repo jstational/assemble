@@ -15,7 +15,7 @@ import ambl.graphics.*;
 import ambl.logic.*;
 
 public final class AssembleMod extends Mod {
-    public static final int version = 1;
+    public static final int version = 0 /* replace this with the version field in buildSettings */;
 
     public static boolean
     disabled = false,
@@ -36,21 +36,21 @@ public final class AssembleMod extends Mod {
         });
 
         if(Vars.mobile || Vars.ios || Vars.android || Vars.testMobile || Vars.headless) {
-            APopupManager.error("Assemble could not initialize, you are playing on a mobile or headless device", 1);
+            PopupManager.error("Assemble could not initialize, you are playing on a mobile or headless device", 1);
             disabled = true;
             return;
         }
 
         for(String curmod : incompatibleMods) {
             if(Vars.mods.getMod(curmod) != null) {
-                APopupManager.error("Assemble could not initialize, incompatible mods are active. See list of incompatible mods in settings", 1);
+                PopupManager.error("Assemble could not initialize, incompatible mods are active. See list of incompatible mods in settings", 1);
                 disabled = true;
                 return;
             }
         }
 
         Vars.ui.logic = new ADialog();
-        ADataDirs.init();
+        ADataManager.init();
         ALocalSaves.init();
     }
 }

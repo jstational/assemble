@@ -50,9 +50,9 @@ public final class APalManager {
 
     public static void savePalette(Fi file) {}
 
-    public static void loadPalette(String name) {
+    public static void loadPaletteFile(String name) {
         if(name == null) return;
-        loadPaletteFile(ADataDirs.palettes.child(name));
+        loadPalette(ADataDirs.palettes.child(name));
     }
 
     public static void loadPalette(Fi file) {
