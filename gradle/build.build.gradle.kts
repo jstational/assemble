@@ -8,8 +8,6 @@ plugins {
     java
 }
 
-rootProject.name = "assemble"
-
 val buildSettings: Map<String, String> = File(projectDir, "buildSettings").readLines().map{it.trim()}.filterNot{it.isEmpty() || it.startsWith("#")}.associate{it.substringBefore(" ") to it.substringAfter(" ", "").trim()}
 fun getBuildSetting(name: String): String = buildSettings[name] ?: ""
 
