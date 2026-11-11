@@ -28,7 +28,7 @@ java {
 }
 sourceSets.main.get().java.srcDirs(getBuildSetting("sourceDir"))
 
-val init = tasks.register("init") {
+val buildinit = tasks.register("buildinit") {
     val mainclass: File = getFileInBuildDir("core/src/ambl/AssembleMod.java");
     mainclass.readText().replaceFirst("0 /* replace this with the version field in buildSettings */", assembleVersion)
     val modjson: File = getFileInBuildDir("mod.json");
@@ -36,7 +36,7 @@ val init = tasks.register("init") {
 }
 
 val tools = tasks.register("tools") {
-    dependsOn(init)
+    dependsOn(buildinit)
 }
 
 val jar = tasks.named<Jar>("jar") {
